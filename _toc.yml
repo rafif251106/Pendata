@@ -6,6 +6,7 @@ root: intro
 chapters:
 - file: Bussines-Understanding
 - file: Data-Understanding
+- file: Missing-Value
 - file: Data-Preparation
 - file: Modeling
 - file: Deployment
