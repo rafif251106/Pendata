@@ -361,7 +361,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
 </div></div>
       
     </div>
@@ -377,6 +379,20 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analisa-data-kesuburan-tanah">Analisa Data Kesuburan Tanah</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pemrosesan-data-menggunakan-knn">Pemrosesan Data menggunakan KNN</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#a-preprocessing-atau-pemrosesan-data">A. Preprocessing atau pemrosesan data</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -388,6 +404,44 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="uts">
 <h1>UTS<a class="headerlink" href="#uts" title="Link to this heading">#</a></h1>
+<section id="analisa-data-kesuburan-tanah">
+<h2>Analisa Data Kesuburan Tanah<a class="headerlink" href="#analisa-data-kesuburan-tanah" title="Link to this heading">#</a></h2>
+<section id="pemrosesan-data-menggunakan-knn">
+<h3>Pemrosesan Data menggunakan KNN<a class="headerlink" href="#pemrosesan-data-menggunakan-knn" title="Link to this heading">#</a></h3>
+<section id="a-preprocessing-atau-pemrosesan-data">
+<h4>A. Preprocessing atau pemrosesan data<a class="headerlink" href="#a-preprocessing-atau-pemrosesan-data" title="Link to this heading">#</a></h4>
+<p>Data sebelum diolah harus dilakukan pemrosesan data supaya data yang digunakan telah bersih, pemrosesan yang saya lakukan diantaranya:</p>
+<ol class="arabic simple">
+<li><p>Missing Value</p></li>
+</ol>
+<p>Pada dataset kesuburan tanah terdapat banyak sekali missing value jadi pada KNIME saya menggunakan widget missing value untuk memberikan nilai pada data missing value. Metode yang saya gunakan adalah:</p>
+<ul class="simple">
+<li><p>Number(float) menggunakan Mean</p></li>
+<li><p>String menggunakan Most Frequence Value</p></li>
+</ul>
+<p>Dataset Sebelum Misiing value</p>
+<p><img alt="Sebelum Missing Value" src="_images/sebelum_missing.png" />
+Dataset Setelah Missing value</p>
+<p><img alt="Setelah Missing Value" src="_images/setelah_missing.png" /></p>
+<ol class="arabic simple" start="2">
+<li><p>Tabel Partisioner</p></li>
+</ol>
+<p>Membagi data menjadi 2 dengan rasio 70% dan 30%</p>
+<ol class="arabic simple" start="3">
+<li><p>Normalisasi</p></li>
+</ol>
+<p>Pada dataset kesuburan tanah saya menggunakan normalisasi min-max.
+Hasil Normalisasi:</p>
+<p><img alt="Hasil Normalisasi" src="_images/normalisasi.png" /></p>
+<ol class="arabic simple" start="4">
+<li><p>PCA</p></li>
+</ol>
+<p>PCA digunakan untuk memngubah dataset dengan fitur banyak menjadi sedikit dan agar dapat digunakan pada KNN, saya mengubah 10 fitur menjadi 4 fitur saja dengan nama PCA dimension 0 - 3.
+Hasil PCA:</p>
+<p><img alt="Hasil PCA" src="_images/pca.png" /></p>
+</section>
+</section>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -435,6 +489,27 @@ document.write(`
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analisa-data-kesuburan-tanah">Analisa Data Kesuburan Tanah</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pemrosesan-data-menggunakan-knn">Pemrosesan Data menggunakan KNN</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#a-preprocessing-atau-pemrosesan-data">A. Preprocessing atau pemrosesan data</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>
