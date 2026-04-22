@@ -387,6 +387,8 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analisa-data-kesuburan-tanah">Analisa Data Kesuburan Tanah</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pemrosesan-data-menggunakan-knn">Pemrosesan Data menggunakan KNN</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#a-preprocessing-atau-pemrosesan-data">A. Preprocessing atau pemrosesan data</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#b-penerapan-algoritma-knn">B. Penerapan Algoritma KNN</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#c-gambar-analisis-menggunakan-knime">C.Gambar Analisis menggunakan KNIME</a></li>
 </ul>
 </li>
 </ul>
@@ -439,6 +441,41 @@ Hasil Normalisasi:</p>
 <p>PCA digunakan untuk memngubah dataset dengan fitur banyak menjadi sedikit dan agar dapat digunakan pada KNN, saya mengubah 10 fitur menjadi 4 fitur saja dengan nama PCA dimension 0 - 3.
 Hasil PCA:</p>
 <p><img alt="Hasil PCA" src="_images/pca.png" /></p>
+</section>
+<section id="b-penerapan-algoritma-knn">
+<h4>B. Penerapan Algoritma KNN<a class="headerlink" href="#b-penerapan-algoritma-knn" title="Link to this heading">#</a></h4>
+<p>Analisis yang saya lakukan yaitu melakukan algoritma KNN dengan data normalisasi lansung tanpa PCA dan Normalisasi dengan PCA.</p>
+<p>Analisis KNN dengan normalisasi lansung tanpa PCA:</p>
+<p><img alt="Hasil KNN tanpa PCA" src="_images/tanpa_pca.png" /></p>
+<p>Analisis KNN dengan normalisasi dengan PCA:</p>
+<p><img alt="Hasil KNN dengan PCA" src="_images/dengan_pca.png" /></p>
+<p>Dari kedua analisis tersebut terlihat bahwa</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Metrik</p></th>
+<th class="head"><p>Nilai</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Accuracy</p></td>
+<td><p>overall = 1 atau 100%</p></td>
+</tr>
+<tr class="row-odd"><td><p>Precision</p></td>
+<td><p>subur dan tidak subur = 1 atau 100%</p></td>
+</tr>
+<tr class="row-even"><td><p>Recall</p></td>
+<td><p>subur dan tidak subur = 1 atau 100%</p></td>
+</tr>
+<tr class="row-odd"><td><p>F1-Score</p></td>
+<td><p>subur dan tidak subur = 1 atau 100%</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="c-gambar-analisis-menggunakan-knime">
+<h4>C.Gambar Analisis menggunakan KNIME<a class="headerlink" href="#c-gambar-analisis-menggunakan-knime" title="Link to this heading">#</a></h4>
+<p><img alt="Gambar Knime" src="_images/knime.png" /></p>
 </section>
 </section>
 </section>
@@ -502,6 +539,8 @@ Hasil PCA:</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analisa-data-kesuburan-tanah">Analisa Data Kesuburan Tanah</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pemrosesan-data-menggunakan-knn">Pemrosesan Data menggunakan KNN</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#a-preprocessing-atau-pemrosesan-data">A. Preprocessing atau pemrosesan data</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#b-penerapan-algoritma-knn">B. Penerapan Algoritma KNN</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#c-gambar-analisis-menggunakan-knime">C.Gambar Analisis menggunakan KNIME</a></li>
 </ul>
 </li>
 </ul>
