@@ -1,0 +1,1487 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>🍷 Analisis Klasifikasi Wine Menggunakan Naive Bayes &#8212; My sample book</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=174e0f65" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=1ae7504c"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'Naive-Bayes';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/baru.png" class="logo__image only-light" alt="My sample book - Home"/>
+    <script>document.write(`<img src="_static/baru.png" class="logo__image only-dark" alt="My sample book - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Moh.Rafif Zaki 240411100092
+                </a>
+            </li>
+        </ul>
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Bussines-Understanding.html">Bussines Understanding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data-Understanding.html">Data Understanding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Missing-Value.html">Missing-Value dan Normalisasi</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Data-Preparation.html">Data Preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Decision-Trees.html">Decision Tree</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Modeling.html">Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Deployment.html">Deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="UTS.html">UTS</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2FNaive-Bayes.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/Naive-Bayes.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>🍷 Analisis Klasifikasi Wine Menggunakan Naive Bayes</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-classifier-dengan-scikit-learn-python">Model Classifier dengan Scikit-Learn (Python)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bagian-1-pengertian-naive-bayes-rumus">📚 Bagian 1 — Pengertian Naive Bayes &amp; Rumus</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pengertian">1.1 Pengertian</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#teorema-bayes-rumus-dasar">1.2 Teorema Bayes — Rumus Dasar</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#aturan-keputusan-naive-bayes">1.3 Aturan Keputusan Naive Bayes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gaussian-naive-bayes-rumus-likelihood">1.4 Gaussian Naive Bayes — Rumus Likelihood</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#varian-naive-bayes-di-scikit-learn">1.5 Varian Naive Bayes di Scikit-Learn</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bagian-2-dataset-yang-digunakan">📦 Bagian 2 — Dataset yang Digunakan</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#deskripsi-dataset-wine-dataset">2.1 Deskripsi Dataset — Wine Dataset</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fitur-yang-dipilih-4-fitur-numerik">2.2 Fitur yang Dipilih (4 Fitur Numerik)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#label-kelas-target">2.3 Label Kelas Target</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bagian-3-implementasi-dengan-python-scikit-learn">🐍 Bagian 3 — Implementasi dengan Python (Scikit-Learn)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bagian-4-implementasi-script-python-di-knime">🔧 Bagian 4 — Implementasi Script Python di KNIME</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#alur-workflow-knime">4.1 Alur Workflow KNIME</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cara-setup-di-knime">⚙️ Cara Setup di KNIME:</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#kesimpulan">✅ Kesimpulan</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#keunggulan-gaussian-naive-bayes">Keunggulan Gaussian Naive Bayes:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#referensi">Referensi:</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="analisis-klasifikasi-wine-menggunakan-naive-bayes">
+<h1>🍷 Analisis Klasifikasi Wine Menggunakan Naive Bayes<a class="headerlink" href="#analisis-klasifikasi-wine-menggunakan-naive-bayes" title="Link to this heading">#</a></h1>
+<section id="model-classifier-dengan-scikit-learn-python">
+<h2>Model Classifier dengan Scikit-Learn (Python)<a class="headerlink" href="#model-classifier-dengan-scikit-learn-python" title="Link to this heading">#</a></h2>
+<hr class="docutils" />
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Atribut</p></th>
+<th class="head"><p>Detail</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Algoritma</strong></p></td>
+<td><p>Gaussian Naive Bayes</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Library</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code> — <a class="reference external" href="https://scikit-learn.org/stable/api/sklearn.naive_bayes.html">sklearn.naive_bayes</a></p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Dataset</strong></p></td>
+<td><p>Wine Dataset (UCI / sklearn built-in)</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Tools</strong></p></td>
+<td><p>Python, Jupyter Notebook, KNIME (Python Script Node)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="bagian-1-pengertian-naive-bayes-rumus">
+<h2>📚 Bagian 1 — Pengertian Naive Bayes &amp; Rumus<a class="headerlink" href="#bagian-1-pengertian-naive-bayes-rumus" title="Link to this heading">#</a></h2>
+<hr class="docutils" />
+<section id="pengertian">
+<h3>1.1 Pengertian<a class="headerlink" href="#pengertian" title="Link to this heading">#</a></h3>
+<p><strong>Naive Bayes</strong> adalah algoritma klasifikasi berbasis <strong>probabilitas</strong> yang dibangun di atas <strong>Teorema Bayes</strong>. Kata <em>“Naive”</em> (naif) merujuk pada asumsi bahwa setiap fitur input bersifat <strong>independen</strong> satu sama lain — artinya nilai suatu fitur tidak memengaruhi fitur lainnya.</p>
+<p>Meskipun asumsi ini jarang terpenuhi di dunia nyata, Naive Bayes terbukti sangat efektif dan efisien untuk berbagai kasus:</p>
+<ul class="simple">
+<li><p>📧 <strong>Filter spam</strong> pada email</p></li>
+<li><p>🏥 <strong>Diagnosis medis</strong> (klasifikasi penyakit)</p></li>
+<li><p>💬 <strong>Analisis sentimen</strong> pada teks</p></li>
+<li><p>🍷 <strong>Klasifikasi produk</strong> berdasarkan kandungan kimia</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="teorema-bayes-rumus-dasar">
+<h3>1.2 Teorema Bayes — Rumus Dasar<a class="headerlink" href="#teorema-bayes-rumus-dasar" title="Link to this heading">#</a></h3>
+<div class="math notranslate nohighlight">
+\[\boxed{P(C_k \mid \mathbf{x}) = \frac{P(\mathbf{x} \mid C_k) \cdot P(C_k)}{P(\mathbf{x})}}\]</div>
+<p><strong>Keterangan lengkap:</strong></p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-center"><p>Simbol</p></th>
+<th class="head"><p>Nama</p></th>
+<th class="head"><p>Definisi</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p><span class="math notranslate nohighlight">\(P(C_k \mid \mathbf{x})\)</span></p></td>
+<td><p><strong>Posterior</strong></p></td>
+<td><p>Probabilitas data termasuk kelas <span class="math notranslate nohighlight">\(C_k\)</span>, setelah melihat fitur <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> — <em>inilah yang ingin kita cari</em></p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p><span class="math notranslate nohighlight">\(P(\mathbf{x} \mid C_k)\)</span></p></td>
+<td><p><strong>Likelihood</strong></p></td>
+<td><p>Seberapa besar kemungkinan fitur <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> muncul jika benar kelas <span class="math notranslate nohighlight">\(C_k\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p><span class="math notranslate nohighlight">\(P(C_k)\)</span></p></td>
+<td><p><strong>Prior</strong></p></td>
+<td><p>Probabilitas awal kelas <span class="math notranslate nohighlight">\(C_k\)</span> sebelum melihat data (proporsi kelas pada data latih)</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p><span class="math notranslate nohighlight">\(P(\mathbf{x})\)</span></p></td>
+<td><p><strong>Evidence</strong></p></td>
+<td><p>Probabilitas total fitur <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> muncul (konstanta — sama untuk semua kelas)</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p><span class="math notranslate nohighlight">\(C_k\)</span></p></td>
+<td><p><strong>Kelas ke-k</strong></p></td>
+<td><p>Label kelas yang ke-<span class="math notranslate nohighlight">\(k\)</span> (misal: kelas 1, 2, 3)</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p><span class="math notranslate nohighlight">\(\mathbf{x}\)</span></p></td>
+<td><p><strong>Vektor fitur</strong></p></td>
+<td><p>Kumpulan nilai fitur input: <span class="math notranslate nohighlight">\(\mathbf{x} = (x_1, x_2, \dots, x_n)\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="aturan-keputusan-naive-bayes">
+<h3>1.3 Aturan Keputusan Naive Bayes<a class="headerlink" href="#aturan-keputusan-naive-bayes" title="Link to this heading">#</a></h3>
+<p>Karena <span class="math notranslate nohighlight">\(P(\mathbf{x})\)</span> nilainya sama untuk semua kelas, maka kita cukup mencari kelas dengan nilai <strong>numerator terbesar</strong>:</p>
+<div class="math notranslate nohighlight">
+\[\boxed{\hat{C} = \arg\max_{k} \; P(C_k) \cdot \prod_{i=1}^{n} P(x_i \mid C_k)}\]</div>
+<p><strong>Keterangan:</strong></p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-center"><p>Simbol</p></th>
+<th class="head"><p>Penjelasan</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p><span class="math notranslate nohighlight">\(\hat{C}\)</span></p></td>
+<td><p>Kelas hasil prediksi (kelas dengan probabilitas tertinggi)</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p><span class="math notranslate nohighlight">\(\arg\max_{k}\)</span></p></td>
+<td><p>Operator yang memilih kelas <span class="math notranslate nohighlight">\(k\)</span> yang memaksimalkan nilai ekspresi</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p><span class="math notranslate nohighlight">\(\prod_{i=1}^{n}\)</span></p></td>
+<td><p>Perkalian probabilitas seluruh fitur <span class="math notranslate nohighlight">\(x_1, x_2, \ldots, x_n\)</span> (asumsi independen)</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p><span class="math notranslate nohighlight">\(x_i\)</span></p></td>
+<td><p>Nilai fitur ke-<span class="math notranslate nohighlight">\(i\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p><span class="math notranslate nohighlight">\(n\)</span></p></td>
+<td><p>Jumlah total fitur dalam dataset</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="gaussian-naive-bayes-rumus-likelihood">
+<h3>1.4 Gaussian Naive Bayes — Rumus Likelihood<a class="headerlink" href="#gaussian-naive-bayes-rumus-likelihood" title="Link to this heading">#</a></h3>
+<p>Karena dataset yang digunakan bersifat <strong>numerik kontinu</strong>, maka digunakan <strong>Gaussian Naive Bayes</strong> yang mengasumsikan setiap fitur mengikuti <strong>distribusi normal (Gaussian)</strong>:</p>
+<div class="math notranslate nohighlight">
+\[\boxed{P(x_i \mid C_k) = \frac{1}{\sqrt{2\pi\,\sigma_{k,i}^{2}}} \;\exp\!\left(-\frac{(x_i - \mu_{k,i})^2}{2\,\sigma_{k,i}^{2}}\right)}\]</div>
+<p><strong>Keterangan:</strong></p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-center"><p>Simbol</p></th>
+<th class="head"><p>Nama</p></th>
+<th class="head"><p>Penjelasan</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p><span class="math notranslate nohighlight">\(P(x_i \mid C_k)\)</span></p></td>
+<td><p><strong>Likelihood Gaussian</strong></p></td>
+<td><p>Probabilitas nilai fitur <span class="math notranslate nohighlight">\(x_i\)</span> jika data berasal dari kelas <span class="math notranslate nohighlight">\(C_k\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p><span class="math notranslate nohighlight">\(\mu_{k,i}\)</span></p></td>
+<td><p><strong>Mean</strong></p></td>
+<td><p>Rata-rata nilai fitur <span class="math notranslate nohighlight">\(x_i\)</span> pada kelas <span class="math notranslate nohighlight">\(C_k\)</span> — dihitung dari data latih</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p><span class="math notranslate nohighlight">\(\sigma_{k,i}^{2}\)</span></p></td>
+<td><p><strong>Variance</strong></p></td>
+<td><p>Ragam (keragaman) nilai fitur <span class="math notranslate nohighlight">\(x_i\)</span> pada kelas <span class="math notranslate nohighlight">\(C_k\)</span> — dihitung dari data latih</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p><span class="math notranslate nohighlight">\(\sigma_{k,i}\)</span></p></td>
+<td><p><strong>Std. Deviasi</strong></p></td>
+<td><p>Akar kuadrat dari variance (<span class="math notranslate nohighlight">\(\sqrt{\sigma^2}\)</span>)</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p><span class="math notranslate nohighlight">\(\pi\)</span></p></td>
+<td><p><strong>Pi</strong></p></td>
+<td><p>Konstanta matematika <span class="math notranslate nohighlight">\(\approx 3.14159\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p><span class="math notranslate nohighlight">\(e^{(\cdot)}\)</span></p></td>
+<td><p><strong>Eksponensial</strong></p></td>
+<td><p>Fungsi eksponensial natural</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p><span class="math notranslate nohighlight">\((x_i - \mu_{k,i})^2\)</span></p></td>
+<td><p><strong>Kuadrat galat</strong></p></td>
+<td><p>Selisih antara nilai fitur dengan rata-ratanya, dikuadratkan</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="varian-naive-bayes-di-scikit-learn">
+<h3>1.5 Varian Naive Bayes di Scikit-Learn<a class="headerlink" href="#varian-naive-bayes-di-scikit-learn" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Kelas sklearn</p></th>
+<th class="head"><p>Tipe Data Fitur</p></th>
+<th class="head"><p>Asumsi Distribusi</p></th>
+<th class="head"><p>Contoh Kasus</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">GaussianNB</span></code></p></td>
+<td><p>Numerik kontinu</p></td>
+<td><p>Normal / Gaussian</p></td>
+<td><p>Data medis, kimia, sensor</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">MultinomialNB</span></code></p></td>
+<td><p>Numerik diskrit (count)</p></td>
+<td><p>Multinomial</p></td>
+<td><p>Frekuensi kata dalam teks</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">BernoulliNB</span></code></p></td>
+<td><p>Biner (0/1)</p></td>
+<td><p>Bernoulli</p></td>
+<td><p>Ada/tidaknya kata dalam dokumen</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ComplementNB</span></code></p></td>
+<td><p>Numerik diskrit</p></td>
+<td><p>Komplemen Multinomial</p></td>
+<td><p>Dataset tidak seimbang</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CategoricalNB</span></code></p></td>
+<td><p>Kategorik diskrit</p></td>
+<td><p>Kategori</p></td>
+<td><p>Data survei, formulir</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<blockquote>
+<div><p>📌 <strong>Pada proyek ini digunakan <code class="docutils literal notranslate"><span class="pre">GaussianNB</span></code></strong> karena seluruh fitur dataset Wine bersifat numerik kontinu.</p>
+</div></blockquote>
+</section>
+</section>
+<hr class="docutils" />
+<section id="bagian-2-dataset-yang-digunakan">
+<h2>📦 Bagian 2 — Dataset yang Digunakan<a class="headerlink" href="#bagian-2-dataset-yang-digunakan" title="Link to this heading">#</a></h2>
+<hr class="docutils" />
+<section id="deskripsi-dataset-wine-dataset">
+<h3>2.1 Deskripsi Dataset — Wine Dataset<a class="headerlink" href="#deskripsi-dataset-wine-dataset" title="Link to this heading">#</a></h3>
+<p>Dataset <strong>Wine</strong> adalah dataset bawaan scikit-learn yang berisi hasil analisis kimia dari tiga jenis wine yang diproduksi di Italia. Dataset ini sangat cocok untuk klasifikasi berbasis data numerik.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Atribut</p></th>
+<th class="head"><p>Nilai</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Sumber</strong></p></td>
+<td><p>UCI Machine Learning Repository</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Jumlah Sampel</strong></p></td>
+<td><p>178 baris</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Total Fitur Asli</strong></p></td>
+<td><p>13 fitur numerik</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Fitur yang Dipakai</strong></p></td>
+<td><p><strong>4 fitur</strong> (dipilih berdasarkan korelasi tertinggi)</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Jumlah Kelas</strong></p></td>
+<td><p>3 kelas (jenis wine)</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Tipe Data</strong></p></td>
+<td><p>Numerik kontinu</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="fitur-yang-dipilih-4-fitur-numerik">
+<h3>2.2 Fitur yang Dipilih (4 Fitur Numerik)<a class="headerlink" href="#fitur-yang-dipilih-4-fitur-numerik" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>No</p></th>
+<th class="head"><p>Nama Fitur</p></th>
+<th class="head"><p>Satuan</p></th>
+<th class="head"><p>Keterangan</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">alcohol</span></code></p></td>
+<td><p>% vol</p></td>
+<td><p>Kadar alkohol dalam wine</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">flavanoids</span></code></p></td>
+<td><p>—</p></td>
+<td><p>Kandungan senyawa flavonoid (antioksidan)</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">color_intensity</span></code></p></td>
+<td><p>—</p></td>
+<td><p>Intensitas warna wine</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">proline</span></code></p></td>
+<td><p>mg/L</p></td>
+<td><p>Kandungan asam amino proline</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Keempat fitur ini dipilih karena memiliki <strong>korelasi tertinggi</strong> terhadap label kelas wine.</p>
+</section>
+<hr class="docutils" />
+<section id="label-kelas-target">
+<h3>2.3 Label Kelas Target<a class="headerlink" href="#label-kelas-target" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Label</p></th>
+<th class="head"><p>Kelas</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>Wine Kelas 1</p></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p>Wine Kelas 2</p></td>
+</tr>
+<tr class="row-even"><td><p>2</p></td>
+<td><p>Wine Kelas 3</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Uncomment jika library belum terinstall</span>
+<span class="c1"># !pip install scikit-learn pandas numpy matplotlib seaborn</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># ============================================================</span>
+<span class="c1"># IMPORT LIBRARY</span>
+<span class="c1"># ============================================================</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_wine</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.naive_bayes</span><span class="w"> </span><span class="kn">import</span> <span class="n">GaussianNB</span>          <span class="c1"># https://scikit-learn.org/stable/api/sklearn.naive_bayes.html</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">accuracy_score</span><span class="p">,</span>
+    <span class="n">classification_report</span><span class="p">,</span>
+    <span class="n">confusion_matrix</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✅ Semua library berhasil diimport!&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">line</span> <span class="mi">7</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="ne">----&gt; </span><span class="mi">7</span> <span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_wine</span>
+<span class="g g-Whitespace">     </span><span class="mi">10</span> <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_test_split</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;seaborn&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># ============================================================</span>
+<span class="c1"># LOAD DATASET WINE</span>
+<span class="c1"># ============================================================</span>
+<span class="n">wine</span> <span class="o">=</span> <span class="n">load_wine</span><span class="p">()</span>
+
+<span class="c1"># Buat DataFrame lengkap (13 fitur)</span>
+<span class="n">df_full</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">wine</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">wine</span><span class="o">.</span><span class="n">feature_names</span><span class="p">)</span>
+<span class="n">df_full</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">wine</span><span class="o">.</span><span class="n">target</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;📋 Dataset Wine — Semua Fitur (13 fitur asli):&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Ukuran : </span><span class="si">{</span><span class="n">df_full</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> baris × </span><span class="si">{</span><span class="n">df_full</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2"> kolom&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Fitur  : </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">wine</span><span class="o">.</span><span class="n">feature_names</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Kelas  : </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">wine</span><span class="o">.</span><span class="n">target_names</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">df_full</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># ============================================================</span>
+<span class="c1"># PEMILIHAN 4 FITUR TERBAIK</span>
+<span class="c1"># Berdasarkan korelasi absolut tertinggi terhadap label kelas</span>
+<span class="c1"># ============================================================</span>
+<span class="n">corr_with_target</span> <span class="o">=</span> <span class="n">df_full</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">corrwith</span><span class="p">(</span><span class="n">df_full</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span>
+<span class="n">corr_sorted</span> <span class="o">=</span> <span class="n">corr_with_target</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;📊 Korelasi Absolut Fitur terhadap Label Target (urut tertinggi):&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">corr_sorted</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="o">.</span><span class="n">to_string</span><span class="p">())</span>
+
+<span class="c1"># Pilih 4 fitur teratas</span>
+<span class="n">TOP_FEATURES</span> <span class="o">=</span> <span class="n">corr_sorted</span><span class="o">.</span><span class="n">index</span><span class="p">[:</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">✅ 4 Fitur Terpilih: </span><span class="si">{</span><span class="n">TOP_FEATURES</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># ============================================================</span>
+<span class="c1"># BUAT DATASET FINAL (4 FITUR)</span>
+<span class="c1"># ============================================================</span>
+<span class="n">FITUR_DIPILIH</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;alcohol&#39;</span><span class="p">,</span> <span class="s1">&#39;flavanoids&#39;</span><span class="p">,</span> <span class="s1">&#39;color_intensity&#39;</span><span class="p">,</span> <span class="s1">&#39;proline&#39;</span><span class="p">]</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">df_full</span><span class="p">[</span><span class="n">FITUR_DIPILIH</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;wine_class&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">({</span>
+    <span class="mi">0</span><span class="p">:</span> <span class="s1">&#39;Wine Kelas 1&#39;</span><span class="p">,</span>
+    <span class="mi">1</span><span class="p">:</span> <span class="s1">&#39;Wine Kelas 2&#39;</span><span class="p">,</span>
+    <span class="mi">2</span><span class="p">:</span> <span class="s1">&#39;Wine Kelas 3&#39;</span>
+<span class="p">})</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;📦 Dataset Final: </span><span class="si">{</span><span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> baris × </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">FITUR_DIPILIH</span><span class="p">)</span><span class="si">}</span><span class="s2"> fitur + 1 target&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">📋 5 Baris Pertama:&quot;</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># ============================================================</span>
+<span class="c1"># EKSPLORASI DATA — Statistik Deskriptif</span>
+<span class="c1"># ============================================================</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;📈 Statistik Deskriptif per Fitur:&quot;</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="n">FITUR_DIPILIH</span><span class="p">]</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># ============================================================</span>
+<span class="c1"># EKSPLORASI DATA — Distribusi Kelas</span>
+<span class="c1"># ============================================================</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;🎯 Distribusi Kelas Target:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;wine_class&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">COLORS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;#C0392B&#39;</span><span class="p">,</span> <span class="s1">&#39;#8E44AD&#39;</span><span class="p">,</span> <span class="s1">&#39;#2980B9&#39;</span><span class="p">]</span>
+
+<span class="c1"># --- Bar chart distribusi kelas ---</span>
+<span class="n">counts</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;wine_class&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">counts</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">counts</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">COLORS</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Distribusi Kelas Wine&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">13</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Kelas&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Jumlah Sampel&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">counts</span><span class="o">.</span><span class="n">values</span><span class="p">):</span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">),</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+
+<span class="c1"># --- Scatter: Alcohol vs Flavanoids ---</span>
+<span class="n">scatter_colors</span> <span class="o">=</span> <span class="p">[</span><span class="n">COLORS</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">]]</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;alcohol&#39;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;flavanoids&#39;</span><span class="p">],</span>
+                <span class="n">c</span><span class="o">=</span><span class="n">scatter_colors</span><span class="p">,</span> <span class="n">edgecolors</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Alcohol (% vol)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Flavanoids&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Scatter: Alcohol vs Flavanoids&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">13</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.patches</span><span class="w"> </span><span class="kn">import</span> <span class="n">Patch</span>
+<span class="n">legend</span> <span class="o">=</span> <span class="p">[</span><span class="n">Patch</span><span class="p">(</span><span class="n">facecolor</span><span class="o">=</span><span class="n">c</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;Kelas </span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">COLORS</span><span class="p">)]</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">handles</span><span class="o">=</span><span class="n">legend</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># ============================================================</span>
+<span class="c1"># VISUALISASI: Boxplot 4 Fitur per Kelas</span>
+<span class="c1"># ============================================================</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">feat</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">FITUR_DIPILIH</span><span class="p">):</span>
+    <span class="n">data_per_kelas</span> <span class="o">=</span> <span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">k</span><span class="p">][</span><span class="n">feat</span><span class="p">]</span><span class="o">.</span><span class="n">values</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span>
+    <span class="n">bp</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">data_per_kelas</span><span class="p">,</span> <span class="n">patch_artist</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                         <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Kelas 1&#39;</span><span class="p">,</span> <span class="s1">&#39;Kelas 2&#39;</span><span class="p">,</span> <span class="s1">&#39;Kelas 3&#39;</span><span class="p">])</span>
+    <span class="k">for</span> <span class="n">patch</span><span class="p">,</span> <span class="n">color</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">bp</span><span class="p">[</span><span class="s1">&#39;boxes&#39;</span><span class="p">],</span> <span class="n">COLORS</span><span class="p">):</span>
+        <span class="n">patch</span><span class="o">.</span><span class="n">set_facecolor</span><span class="p">(</span><span class="n">color</span><span class="p">)</span>
+        <span class="n">patch</span><span class="o">.</span><span class="n">set_alpha</span><span class="p">(</span><span class="mf">0.7</span><span class="p">)</span>
+    <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">feat</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">)</span><span class="o">.</span><span class="n">title</span><span class="p">(),</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+    <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Nilai&#39;</span><span class="p">)</span>
+    <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Distribusi 4 Fitur per Kelas Wine&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">1.02</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># ============================================================</span>
+<span class="c1"># HEATMAP KORELASI 4 FITUR</span>
+<span class="c1"># ============================================================</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">corr_4</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">FITUR_DIPILIH</span><span class="p">]</span><span class="o">.</span><span class="n">corr</span><span class="p">()</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">corr_4</span><span class="p">,</span> <span class="n">annot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;.3f&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;coolwarm&#39;</span><span class="p">,</span>
+            <span class="n">square</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Heatmap Korelasi Antar Fitur&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">13</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="bagian-3-implementasi-dengan-python-scikit-learn">
+<h2>🐍 Bagian 3 — Implementasi dengan Python (Scikit-Learn)<a class="headerlink" href="#bagian-3-implementasi-dengan-python-scikit-learn" title="Link to this heading">#</a></h2>
+<p>Referensi API: <a class="reference external" href="https://scikit-learn.org/stable/api/sklearn.naive_bayes.html">sklearn.naive_bayes.GaussianNB</a></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># ============================================================</span>
+<span class="c1"># SPLIT DATA: 80% Training — 20% Testing</span>
+<span class="c1"># ============================================================</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">FITUR_DIPILIH</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span>
+    <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+    <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span>
+    <span class="n">stratify</span><span class="o">=</span><span class="n">y</span>          <span class="c1"># pastikan proporsi kelas seimbang</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;📦 Total Data      : </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="si">}</span><span class="s2"> sampel&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;📦 Data Training   : </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span><span class="si">}</span><span class="s2"> sampel  (</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="o">*</span><span class="mi">100</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2">%)&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;📦 Data Testing    : </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span><span class="si">}</span><span class="s2"> sampel   (</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="o">*</span><span class="mi">100</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2">%)&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># ============================================================</span>
+<span class="c1"># TRAINING MODEL — Gaussian Naive Bayes</span>
+<span class="c1"># Docs: https://scikit-learn.org/stable/api/sklearn.naive_bayes.html</span>
+<span class="c1"># ============================================================</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">GaussianNB</span><span class="p">()</span>
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✅ Model GaussianNB berhasil dilatih!&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">🔢 Prior Probabilitas Kelas (P(Ck)):&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">prior</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">wine</span><span class="o">.</span><span class="n">target_names</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">class_prior_</span><span class="p">)):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   P(Wine Kelas </span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">) = </span><span class="si">{</span><span class="n">prior</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">  (</span><span class="si">{</span><span class="n">prior</span><span class="o">*</span><span class="mi">100</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">%)&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">📊 Mean (μ) tiap fitur per kelas:&quot;</span><span class="p">)</span>
+<span class="n">mean_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">theta_</span><span class="p">,</span>
+    <span class="n">columns</span><span class="o">=</span><span class="n">FITUR_DIPILIH</span><span class="p">,</span>
+    <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Kelas 1&#39;</span><span class="p">,</span> <span class="s1">&#39;Kelas 2&#39;</span><span class="p">,</span> <span class="s1">&#39;Kelas 3&#39;</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="n">mean_df</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># ============================================================</span>
+<span class="c1"># PREDIKSI DATA TESTING</span>
+<span class="c1"># ============================================================</span>
+<span class="n">y_pred</span>  <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+<span class="n">y_proba</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+
+<span class="c1"># Tampilkan 10 hasil prediksi</span>
+<span class="n">hasil</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s1">&#39;Aktual&#39;</span>      <span class="p">:</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;Kelas </span><span class="si">{</span><span class="n">t</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">y_test</span><span class="p">[:</span><span class="mi">10</span><span class="p">]],</span>
+    <span class="s1">&#39;Prediksi&#39;</span>    <span class="p">:</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;Kelas </span><span class="si">{</span><span class="n">p</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">y_pred</span><span class="p">[:</span><span class="mi">10</span><span class="p">]],</span>
+    <span class="s1">&#39;P(Kelas 1)&#39;</span>  <span class="p">:</span> <span class="n">y_proba</span><span class="p">[:</span><span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span>
+    <span class="s1">&#39;P(Kelas 2)&#39;</span>  <span class="p">:</span> <span class="n">y_proba</span><span class="p">[:</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span>
+    <span class="s1">&#39;P(Kelas 3)&#39;</span>  <span class="p">:</span> <span class="n">y_proba</span><span class="p">[:</span><span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span>
+    <span class="s1">&#39;Benar?&#39;</span>      <span class="p">:</span> <span class="p">[</span><span class="s1">&#39;✅&#39;</span> <span class="k">if</span> <span class="n">a</span> <span class="o">==</span> <span class="n">p</span> <span class="k">else</span> <span class="s1">&#39;❌&#39;</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">y_test</span><span class="p">[:</span><span class="mi">10</span><span class="p">],</span> <span class="n">y_pred</span><span class="p">[:</span><span class="mi">10</span><span class="p">])]</span>
+<span class="p">})</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;🔍 10 Hasil Prediksi Pertama:&quot;</span><span class="p">)</span>
+<span class="n">hasil</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># ============================================================</span>
+<span class="c1"># EVALUASI MODEL</span>
+<span class="c1"># ============================================================</span>
+<span class="n">acc</span> <span class="o">=</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">55</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   EVALUASI MODEL — GAUSSIAN NAIVE BAYES&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">55</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   🎯 Accuracy Score : </span><span class="si">{</span><span class="n">acc</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">  (</span><span class="si">{</span><span class="n">acc</span><span class="o">*</span><span class="mi">100</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">%)&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   ✅ Prediksi Benar : </span><span class="si">{</span><span class="p">(</span><span class="n">y_test</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">y_pred</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">}</span><span class="s2"> dari </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">y_test</span><span class="p">)</span><span class="si">}</span><span class="s2"> sampel&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   ❌ Prediksi Salah : </span><span class="si">{</span><span class="p">(</span><span class="n">y_test</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">y_pred</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">}</span><span class="s2"> dari </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">y_test</span><span class="p">)</span><span class="si">}</span><span class="s2"> sampel&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">55</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">📊 Classification Report:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">classification_report</span><span class="p">(</span>
+    <span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span>
+    <span class="n">target_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Wine Kelas 1&#39;</span><span class="p">,</span> <span class="s1">&#39;Wine Kelas 2&#39;</span><span class="p">,</span> <span class="s1">&#39;Wine Kelas 3&#39;</span><span class="p">]</span>
+<span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># ============================================================</span>
+<span class="c1"># CONFUSION MATRIX</span>
+<span class="c1"># ============================================================</span>
+<span class="n">cm</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span>
+    <span class="n">cm</span><span class="p">,</span>
+    <span class="n">annot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;d&#39;</span><span class="p">,</span>
+    <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Reds&#39;</span><span class="p">,</span>
+    <span class="n">xticklabels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Kelas 1&#39;</span><span class="p">,</span> <span class="s1">&#39;Kelas 2&#39;</span><span class="p">,</span> <span class="s1">&#39;Kelas 3&#39;</span><span class="p">],</span>
+    <span class="n">yticklabels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Kelas 1&#39;</span><span class="p">,</span> <span class="s1">&#39;Kelas 2&#39;</span><span class="p">,</span> <span class="s1">&#39;Kelas 3&#39;</span><span class="p">],</span>
+    <span class="n">linewidths</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+    <span class="n">annot_kws</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="mi">13</span><span class="p">}</span>
+<span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Confusion Matrix — Gaussian Naive Bayes&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">13</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Label Aktual&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Label Prediksi&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Interpretasi Confusion Matrix:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  - Angka pada DIAGONAL UTAMA  → Prediksi BENAR (True Positive)&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  - Angka di LUAR diagonal     → Prediksi SALAH (misclassified)&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># ============================================================</span>
+<span class="c1"># DEMONSTRASI PERHITUNGAN MANUAL TEOREMA BAYES</span>
+<span class="c1"># (Contoh 1 sampel untuk memahami cara kerja GaussianNB)</span>
+<span class="c1"># ============================================================</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+
+<span class="n">sample_idx</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">sample</span>      <span class="o">=</span> <span class="n">X_test</span><span class="p">[</span><span class="n">sample_idx</span><span class="p">]</span>
+<span class="n">actual_cls</span>  <span class="o">=</span> <span class="n">y_test</span><span class="p">[</span><span class="n">sample_idx</span><span class="p">]</span>
+<span class="n">pred_cls</span>    <span class="o">=</span> <span class="n">y_pred</span><span class="p">[</span><span class="n">sample_idx</span><span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;📐 DEMONSTRASI PERHITUNGAN MANUAL — GAUSSIAN NAIVE BAYES&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">60</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Sampel Input   : </span><span class="si">{</span><span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">FITUR_DIPILIH</span><span class="p">,</span><span class="w"> </span><span class="n">sample</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">)))</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Kelas Aktual   : Wine Kelas </span><span class="si">{</span><span class="n">actual_cls</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Kelas Prediksi : Wine Kelas </span><span class="si">{</span><span class="n">pred_cls</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">()</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">gaussian_pdf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">mean</span><span class="p">,</span> <span class="n">var</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Menghitung P(xi | Ck) menggunakan rumus Gaussian.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">var</span><span class="p">))</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">((</span><span class="n">x</span> <span class="o">-</span> <span class="n">mean</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">var</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;--- Perhitungan Log-Posterior per Kelas ---&quot;</span><span class="p">)</span>
+<span class="n">scores</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+    <span class="n">log_prior</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">class_prior_</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+    <span class="n">log_likelihood</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span>
+        <span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">gaussian_pdf</span><span class="p">(</span><span class="n">sample</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">model</span><span class="o">.</span><span class="n">theta_</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">i</span><span class="p">],</span> <span class="n">model</span><span class="o">.</span><span class="n">var_</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">i</span><span class="p">]))</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">FITUR_DIPILIH</span><span class="p">))</span>
+    <span class="p">)</span>
+    <span class="n">log_posterior</span> <span class="o">=</span> <span class="n">log_prior</span> <span class="o">+</span> <span class="n">log_likelihood</span>
+    <span class="n">scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">log_posterior</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Wine Kelas </span><span class="si">{</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">: log_prior=</span><span class="si">{</span><span class="n">log_prior</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">, log_likelihood=</span><span class="si">{</span><span class="n">log_likelihood</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">, log_posterior=</span><span class="si">{</span><span class="n">log_posterior</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">best</span> <span class="o">=</span> <span class="n">scores</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">scores</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">✅ Kelas terpilih → Wine Kelas </span><span class="si">{</span><span class="n">best</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2"> (log-posterior tertinggi = </span><span class="si">{</span><span class="nb">max</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--- Probabilitas Final (setelah normalisasi) ---&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">y_proba</span><span class="p">[</span><span class="n">sample_idx</span><span class="p">]):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  P(Wine Kelas </span><span class="si">{</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2"> | x) = </span><span class="si">{</span><span class="n">p</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="bagian-4-implementasi-script-python-di-knime">
+<h2>🔧 Bagian 4 — Implementasi Script Python di KNIME<a class="headerlink" href="#bagian-4-implementasi-script-python-di-knime" title="Link to this heading">#</a></h2>
+<p>Pada bagian ini, implementasi Naive Bayes dilakukan menggunakan <strong>Python Script Node</strong> di KNIME — <strong>bukan</strong> menggunakan node bawaan KNIME, melainkan dengan menulis script Python langsung di dalamnya.</p>
+<hr class="docutils" />
+<section id="alur-workflow-knime">
+<h3>4.1 Alur Workflow KNIME<a class="headerlink" href="#alur-workflow-knime" title="Link to this heading">#</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> ┌─────────────────────┐
+ │  Python Script #1   │  ← Load Dataset Wine &amp; Pilih 4 Fitur
+ └────────┬────────────┘
+          │ output_table
+          ▼
+ ┌─────────────────────┐
+ │  Python Script #2   │  ← Training GaussianNB &amp; Prediksi
+ └────────┬────────────┘
+          │ output_table
+          ▼
+ ┌─────────────────────┐     ┌──────────────┐
+ │  Python Script #3   │     │  Table View  │
+ │  (Evaluasi Model)   │     │  (Hasil Pred)│
+ └─────────────────────┘     └──────────────┘
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="cara-setup-di-knime">
+<h3>⚙️ Cara Setup di KNIME:<a class="headerlink" href="#cara-setup-di-knime" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p>Buka <strong>KNIME Analytics Platform</strong></p></li>
+<li><p>Tambahkan node <strong>Python Script</strong> dari Node Repository</p></li>
+<li><p>Masuk ke <code class="docutils literal notranslate"><span class="pre">File</span> <span class="pre">→</span> <span class="pre">Preferences</span> <span class="pre">→</span> <span class="pre">KNIME</span> <span class="pre">→</span> <span class="pre">Python</span></code> → arahkan ke environment Python yang sudah ada <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code>, <code class="docutils literal notranslate"><span class="pre">pandas</span></code>, <code class="docutils literal notranslate"><span class="pre">numpy</span></code></p></li>
+<li><p>Hubungkan 3 node secara berurutan</p></li>
+<li><p>Tempel masing-masing script di bawah ke setiap node</p></li>
+<li><p>Klik kanan → <strong>Execute</strong> untuk setiap node</p></li>
+</ol>
+<blockquote>
+<div><p>⚠️ Di KNIME Python Script Node, data dari node sebelumnya dibaca via variabel <code class="docutils literal notranslate"><span class="pre">input_table</span></code>, dan dikirim ke node berikutnya via <code class="docutils literal notranslate"><span class="pre">output_table</span></code>.</p>
+</div></blockquote>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># ================================================================</span>
+<span class="c1"># KNIME — NODE 1: Load Dataset &amp; Pilih 4 Fitur</span>
+<span class="c1"># Tempel script ini pada Python Script Node pertama di KNIME</span>
+<span class="c1"># Input  : (tidak ada)</span>
+<span class="c1"># Output : output_table → DataFrame wine dengan 4 fitur</span>
+<span class="c1"># ================================================================</span>
+
+<span class="n">knime_script_node1</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">import pandas as pd</span>
+<span class="s1">from sklearn.datasets import load_wine</span>
+
+<span class="s1"># --- Load Dataset ---</span>
+<span class="s1">wine = load_wine()</span>
+<span class="s1">df_full = pd.DataFrame(wine.data, columns=wine.feature_names)</span>
+<span class="s1">df_full[&#39;target&#39;] = wine.target</span>
+
+<span class="s1"># --- Pilih 4 Fitur Numerik Terbaik ---</span>
+<span class="s1">FITUR = [&#39;alcohol&#39;, &#39;flavanoids&#39;, &#39;color_intensity&#39;, &#39;proline&#39;]</span>
+<span class="s1">df = df_full[FITUR + [&#39;target&#39;]].copy()</span>
+<span class="s1">df[&#39;wine_class&#39;] = df[&#39;target&#39;].map({</span>
+<span class="s1">    0: &#39;Wine Kelas 1&#39;,</span>
+<span class="s1">    1: &#39;Wine Kelas 2&#39;,</span>
+<span class="s1">    2: &#39;Wine Kelas 3&#39;</span>
+<span class="s1">})</span>
+
+<span class="s1">print(f&quot;Dataset dimuat: </span><span class="si">{df.shape[0]}</span><span class="s1"> baris x {len(FITUR)} fitur&quot;)</span>
+<span class="s1">print(f&quot;Distribusi kelas: {df[&#39;wine_class&#39;].value_counts().to_dict()}&quot;)</span>
+<span class="s1">print(df.head())</span>
+
+<span class="s1"># --- Output ke Node Berikutnya ---</span>
+<span class="s1">output_table = df</span>
+<span class="s1">&#39;&#39;&#39;</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">65</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot; KNIME NODE 1 — Load Dataset Wine &amp; Pilih 4 Fitur&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">65</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">knime_script_node1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># ================================================================</span>
+<span class="c1"># KNIME — NODE 2: Training Model &amp; Prediksi</span>
+<span class="c1"># Input  : input_table (output dari Node 1)</span>
+<span class="c1"># Output : output_table → DataFrame hasil prediksi</span>
+<span class="c1"># ================================================================</span>
+
+<span class="n">knime_script_node2</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">import pandas as pd</span>
+<span class="s1">from sklearn.model_selection import train_test_split</span>
+<span class="s1">from sklearn.naive_bayes import GaussianNB</span>
+<span class="s1"># Referensi: https://scikit-learn.org/stable/api/sklearn.naive_bayes.html</span>
+
+<span class="s1"># --- Baca data dari Node 1 ---</span>
+<span class="s1">df = input_table.copy()</span>
+
+<span class="s1">FITUR = [&#39;alcohol&#39;, &#39;flavanoids&#39;, &#39;color_intensity&#39;, &#39;proline&#39;]</span>
+<span class="s1">TARGET = &#39;target&#39;</span>
+
+<span class="s1">X = df[FITUR].values</span>
+<span class="s1">y = df[TARGET].values</span>
+
+<span class="s1"># --- Split Data: 80% Training, 20% Testing ---</span>
+<span class="s1">X_train, X_test, y_train, y_test = train_test_split(</span>
+<span class="s1">    X, y, test_size=0.2, random_state=42, stratify=y</span>
+<span class="s1">)</span>
+
+<span class="s1"># --- Training Model Gaussian Naive Bayes ---</span>
+<span class="s1">model = GaussianNB()</span>
+<span class="s1">model.fit(X_train, y_train)</span>
+
+<span class="s1"># --- Prediksi ---</span>
+<span class="s1">y_pred  = model.predict(X_test)</span>
+<span class="s1">y_proba = model.predict_proba(X_test)</span>
+
+<span class="s1"># --- Buat DataFrame hasil prediksi ---</span>
+<span class="s1">label_map = {0: &#39;Wine Kelas 1&#39;, 1: &#39;Wine Kelas 2&#39;, 2: &#39;Wine Kelas 3&#39;}</span>
+<span class="s1">result_df = pd.DataFrame(X_test, columns=FITUR)</span>
+<span class="s1">result_df[&#39;actual&#39;]        = [label_map[i] for i in y_test]</span>
+<span class="s1">result_df[&#39;predicted&#39;]     = [label_map[i] for i in y_pred]</span>
+<span class="s1">result_df[&#39;prob_kelas_1&#39;]  = y_proba[:, 0].round(4)</span>
+<span class="s1">result_df[&#39;prob_kelas_2&#39;]  = y_proba[:, 1].round(4)</span>
+<span class="s1">result_df[&#39;prob_kelas_3&#39;]  = y_proba[:, 2].round(4)</span>
+<span class="s1">result_df[&#39;correct&#39;]       = (y_test == y_pred)</span>
+
+<span class="s1">print(f&quot;Model dilatih dengan {len(X_train)} sampel&quot;)</span>
+<span class="s1">print(f&quot;Prediksi pada {len(X_test)} sampel uji&quot;)</span>
+<span class="s1">print(result_df.head())</span>
+
+<span class="s1"># --- Output ke Node Berikutnya ---</span>
+<span class="s1">output_table = result_df</span>
+<span class="s1">&#39;&#39;&#39;</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">65</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot; KNIME NODE 2 — Training GaussianNB &amp; Prediksi&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">65</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">knime_script_node2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># ================================================================</span>
+<span class="c1"># KNIME — NODE 3: Evaluasi Model</span>
+<span class="c1"># Input  : input_table (output dari Node 2 — hasil prediksi)</span>
+<span class="c1"># Output : output_table → DataFrame ringkasan metrik evaluasi</span>
+<span class="c1"># ================================================================</span>
+
+<span class="n">knime_script_node3</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">import pandas as pd</span>
+<span class="s1">from sklearn.metrics import (</span>
+<span class="s1">    accuracy_score,</span>
+<span class="s1">    classification_report,</span>
+<span class="s1">    confusion_matrix</span>
+<span class="s1">)</span>
+
+<span class="s1"># --- Baca hasil prediksi dari Node 2 ---</span>
+<span class="s1">df = input_table.copy()</span>
+
+<span class="s1">label_map = {&#39;Wine Kelas 1&#39;: 0, &#39;Wine Kelas 2&#39;: 1, &#39;Wine Kelas 3&#39;: 2}</span>
+<span class="s1">y_test = df[&#39;actual&#39;].map(label_map).values</span>
+<span class="s1">y_pred = df[&#39;predicted&#39;].map(label_map).values</span>
+
+<span class="s1"># --- Hitung Metrik Evaluasi ---</span>
+<span class="s1">acc = accuracy_score(y_test, y_pred)</span>
+
+<span class="s1">print(&quot;=&quot; * 55)</span>
+<span class="s1">print(&quot;  EVALUASI MODEL — GAUSSIAN NAIVE BAYES&quot;)</span>
+<span class="s1">print(&quot;=&quot; * 55)</span>
+<span class="s1">print(f&quot;  Accuracy  : </span><span class="si">{acc:.4f}</span><span class="s1"> ({acc*100:.2f}%)&quot;)</span>
+<span class="s1">print(f&quot;  Total     : {len(y_test)} sampel uji&quot;)</span>
+<span class="s1">print(f&quot;  Benar     : {sum(y_test == y_pred)} prediksi&quot;)</span>
+<span class="s1">print(f&quot;  Salah     : {sum(y_test != y_pred)} prediksi&quot;)</span>
+<span class="s1">print()</span>
+<span class="s1">print(&quot;Classification Report:&quot;)</span>
+<span class="s1">print(classification_report(</span>
+<span class="s1">    y_test, y_pred,</span>
+<span class="s1">    target_names=[&#39;Wine Kelas 1&#39;, &#39;Wine Kelas 2&#39;, &#39;Wine Kelas 3&#39;]</span>
+<span class="s1">))</span>
+<span class="s1">print(&quot;Confusion Matrix:&quot;)</span>
+<span class="s1">print(confusion_matrix(y_test, y_pred))</span>
+
+<span class="s1"># --- Output ringkasan ke KNIME Table ---</span>
+<span class="s1">output_table = pd.DataFrame({</span>
+<span class="s1">    &#39;metric&#39; : [&#39;accuracy&#39;, &#39;total_sampel&#39;, &#39;benar&#39;, &#39;salah&#39;],</span>
+<span class="s1">    &#39;nilai&#39;  : [round(acc, 4), len(y_test),</span>
+<span class="s1">                int(sum(y_test == y_pred)),</span>
+<span class="s1">                int(sum(y_test != y_pred))]</span>
+<span class="s1">})</span>
+<span class="s1">&#39;&#39;&#39;</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">65</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot; KNIME NODE 3 — Evaluasi Model&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">65</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">knime_script_node3</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="kesimpulan">
+<h2>✅ Kesimpulan<a class="headerlink" href="#kesimpulan" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Aspek</p></th>
+<th class="head"><p>Detail</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Algoritma</strong></p></td>
+<td><p>Gaussian Naive Bayes (<code class="docutils literal notranslate"><span class="pre">sklearn.naive_bayes.GaussianNB</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Dataset</strong></p></td>
+<td><p>Wine Dataset — 178 sampel, <strong>4 fitur numerik</strong></p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Fitur</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">alcohol</span></code>, <code class="docutils literal notranslate"><span class="pre">flavanoids</span></code>, <code class="docutils literal notranslate"><span class="pre">color_intensity</span></code>, <code class="docutils literal notranslate"><span class="pre">proline</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Target</strong></p></td>
+<td><p>3 kelas wine (Kelas 1, 2, 3)</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Split Data</strong></p></td>
+<td><p>80% Training / 20% Testing</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Metrik Evaluasi</strong></p></td>
+<td><p>Accuracy, Precision, Recall, F1-Score, Confusion Matrix</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<section id="keunggulan-gaussian-naive-bayes">
+<h3>Keunggulan Gaussian Naive Bayes:<a class="headerlink" href="#keunggulan-gaussian-naive-bayes" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>⚡ <strong>Cepat</strong> — proses training sangat singkat</p></li>
+<li><p>📊 <strong>Efisien</strong> — bekerja optimal pada data numerik kontinu</p></li>
+<li><p>🎯 <strong>Menghasilkan probabilitas</strong> — bukan sekadar label prediksi</p></li>
+<li><p>🔢 <strong>Interpretable</strong> — parameter (mean &amp; variance) mudah dipahami</p></li>
+</ul>
+</section>
+<section id="referensi">
+<h3>Referensi:<a class="headerlink" href="#referensi" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>📖 <a class="reference external" href="https://scikit-learn.org/stable/api/sklearn.naive_bayes.html">scikit-learn Naive Bayes API</a></p></li>
+<li><p>📖 <a class="reference external" href="https://archive.ics.uci.edu/ml/datasets/wine">Wine Dataset — UCI ML Repository</a></p></li>
+<li><p>📖 <a class="reference external" href="https://hub.knime.com/knime/extensions/org.knime.python3.nodes/latest">KNIME Python Script Node Documentation</a></p></li>
+</ul>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-classifier-dengan-scikit-learn-python">Model Classifier dengan Scikit-Learn (Python)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bagian-1-pengertian-naive-bayes-rumus">📚 Bagian 1 — Pengertian Naive Bayes &amp; Rumus</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pengertian">1.1 Pengertian</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#teorema-bayes-rumus-dasar">1.2 Teorema Bayes — Rumus Dasar</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#aturan-keputusan-naive-bayes">1.3 Aturan Keputusan Naive Bayes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gaussian-naive-bayes-rumus-likelihood">1.4 Gaussian Naive Bayes — Rumus Likelihood</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#varian-naive-bayes-di-scikit-learn">1.5 Varian Naive Bayes di Scikit-Learn</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bagian-2-dataset-yang-digunakan">📦 Bagian 2 — Dataset yang Digunakan</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#deskripsi-dataset-wine-dataset">2.1 Deskripsi Dataset — Wine Dataset</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fitur-yang-dipilih-4-fitur-numerik">2.2 Fitur yang Dipilih (4 Fitur Numerik)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#label-kelas-target">2.3 Label Kelas Target</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bagian-3-implementasi-dengan-python-scikit-learn">🐍 Bagian 3 — Implementasi dengan Python (Scikit-Learn)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bagian-4-implementasi-script-python-di-knime">🔧 Bagian 4 — Implementasi Script Python di KNIME</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#alur-workflow-knime">4.1 Alur Workflow KNIME</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cara-setup-di-knime">⚙️ Cara Setup di KNIME:</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#kesimpulan">✅ Kesimpulan</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#keunggulan-gaussian-naive-bayes">Keunggulan Gaussian Naive Bayes:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#referensi">Referensi:</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By The Jupyter Book Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
