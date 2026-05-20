@@ -9,6 +9,7 @@ chapters:
 - file: Missing-Value
 - file: Data-Preparation
 - file: Decision-Trees
+- file: Random-Forest
 - file: Modeling
 - file: Deployment
 - file: UTS
