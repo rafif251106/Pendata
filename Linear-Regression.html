@@ -501,6 +501,7 @@ $<span class="math notranslate nohighlight">\( \hat{Y} = 1.05X + 0.4 \)</span>$<
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LinearRegression</span>
 
 <span class="c1"># Data X (variabel independen)</span>
@@ -509,8 +510,7 @@ $<span class="math notranslate nohighlight">\( \hat{Y} = 1.05X + 0.4 \)</span>$<
 <span class="c1"># Data Y (variabel dependen)</span>
 <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">])</span>
 
-<span class="c1"># scikit-learn menuntut X berbentuk matriks 2D.</span>
-<span class="c1"># Karena satu fitur saja, kita ubah menjadi kolom.</span>
+<span class="c1"># Ubah X menjadi matriks 2D (format yang diminta scikit-learn)</span>
 <span class="n">X</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
 <span class="c1"># Membuat model Linear Regression</span>
@@ -519,24 +519,58 @@ $<span class="math notranslate nohighlight">\( \hat{Y} = 1.05X + 0.4 \)</span>$<
 <span class="c1"># Melatih model</span>
 <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
 
-<span class="c1"># Mengambil koefisien</span>
-<span class="n">beta_0</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">intercept_</span> 
-<span class="n">beta_1</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">coef_</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>    
+<span class="c1"># Mengambil koefisien regresi</span>
+<span class="n">beta_0</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">intercept_</span>   <span class="c1"># Intercept (β0)</span>
+<span class="n">beta_1</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">coef_</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>     <span class="c1"># Slope (β1)</span>
+
 
 <span class="c1"># Menampilkan persamaan regresi</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Persamaan regresi:&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Y = </span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="n">beta_1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="si">}</span><span class="s2">X + </span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="n">beta_0</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Y = </span><span class="si">{</span><span class="n">beta_0</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> + </span><span class="si">{</span><span class="n">beta_1</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">X&quot;</span><span class="p">)</span>
+
+<span class="c1"># Prediksi nilai Y</span>
+<span class="n">y_pred</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+<span class="c1"># Nilai R^2</span>
+<span class="n">r2</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+<span class="c1"># ---------------------------</span>
+<span class="c1"># Membuat grafik</span>
+<span class="c1"># ---------------------------</span>
+
+<span class="c1"># Scatter plot data asli</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Data Asli&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">80</span><span class="p">)</span>
+
+<span class="c1"># Urutkan data agar garis regresi terlihat rapi</span>
+<span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">x_sorted</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+<span class="n">y_pred_sorted</span> <span class="o">=</span> <span class="n">y_pred</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+
+<span class="c1"># Plot garis regresi</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_sorted</span><span class="p">,</span> <span class="n">y_pred_sorted</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+         <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;Garis Regresi: Y = </span><span class="si">{</span><span class="n">beta_0</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1"> + </span><span class="si">{</span><span class="n">beta_1</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">X&#39;</span><span class="p">)</span>
+
+<span class="c1"># Judul dan label</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Linear Regression dengan Scikit-Learn&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;X&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Y&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Menampilkan grafik</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
 <span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">3</span>
 <span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="ne">----&gt; </span><span class="mi">2</span> <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LinearRegression</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="c1"># Data X (variabel independen)</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="ne">----&gt; </span><span class="mi">3</span> <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LinearRegression</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="c1"># Data X (variabel independen)</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
 
 <span class="ne">ModuleNotFoundError</span>: No module named &#39;sklearn&#39;
 </pre></div>

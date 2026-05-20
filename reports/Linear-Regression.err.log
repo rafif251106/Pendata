@@ -23,6 +23,7 @@ Traceback (most recent call last):
 nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
 ------------------
 import numpy as np
+import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
 
 # Data X (variabel independen)
@@ -31,8 +32,7 @@ x = np.array([2, 4, 3, 3, 3, 4, 5])
 # Data Y (variabel dependen)
 y = np.array([2, 3, 5, 4, 3, 5, 6])
 
-# scikit-learn menuntut X berbentuk matriks 2D.
-# Karena satu fitur saja, kita ubah menjadi kolom.
+# Ubah X menjadi matriks 2D (format yang diminta scikit-learn)
 X = x.reshape(-1, 1)
 
 # Membuat model Linear Regression
@@ -41,23 +41,57 @@ model = LinearRegression()
 # Melatih model
 model.fit(X, y)
 
-# Mengambil koefisien
-beta_0 = model.intercept_ 
-beta_1 = model.coef_[0]    
+# Mengambil koefisien regresi
+beta_0 = model.intercept_   # Intercept (β0)
+beta_1 = model.coef_[0]     # Slope (β1)
+
 
 # Menampilkan persamaan regresi
 print(f"\nPersamaan regresi:")
-print(f"Y = {round(beta_1, 2)}X + {round(beta_0, 2)}")
+print(f"Y = {beta_0:.4f} + {beta_1:.4f}X")
+
+# Prediksi nilai Y
+y_pred = model.predict(X)
+
+# Nilai R^2
+r2 = model.score(X, y)
+
+# ---------------------------
+# Membuat grafik
+# ---------------------------
+
+# Scatter plot data asli
+plt.scatter(x, y, label='Data Asli', s=80)
+
+# Urutkan data agar garis regresi terlihat rapi
+idx = np.argsort(x)
+x_sorted = x[idx]
+y_pred_sorted = y_pred[idx]
+
+# Plot garis regresi
+plt.plot(x_sorted, y_pred_sorted, linewidth=2,
+         label=f'Garis Regresi: Y = {beta_0:.2f} + {beta_1:.2f}X')
+
+# Judul dan label
+plt.title('Linear Regression dengan Scikit-Learn')
+plt.xlabel('X')
+plt.ylabel('Y')
+plt.legend()
+plt.grid(True)
+
+# Menampilkan grafik
+plt.show()
 ------------------
 
 
 [1;31m---------------------------------------------------------------------------[0m
 [1;31mModuleNotFoundError[0m                       Traceback (most recent call last)
-Cell [1;32mIn[1], line 2[0m
+Cell [1;32mIn[1], line 3[0m
 [0;32m      1[0m [38;5;28;01mimport[39;00m[38;5;250m [39m[38;5;21;01mnumpy[39;00m[38;5;250m [39m[38;5;28;01mas[39;00m[38;5;250m [39m[38;5;21;01mnp[39;00m
-[1;32m----> 2[0m [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;21;01msklearn[39;00m[38;5;21;01m.[39;00m[38;5;21;01mlinear_model[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m LinearRegression
-[0;32m      4[0m [38;5;66;03m# Data X (variabel independen)[39;00m
-[0;32m      5[0m x [38;5;241m=[39m np[38;5;241m.[39marray([[38;5;241m2[39m, [38;5;241m4[39m, [38;5;241m3[39m, [38;5;241m3[39m, [38;5;241m3[39m, [38;5;241m4[39m, [38;5;241m5[39m])
+[0;32m      2[0m [38;5;28;01mimport[39;00m[38;5;250m [39m[38;5;21;01mmatplotlib[39;00m[38;5;21;01m.[39;00m[38;5;21;01mpyplot[39;00m[38;5;250m [39m[38;5;28;01mas[39;00m[38;5;250m [39m[38;5;21;01mplt[39;00m
+[1;32m----> 3[0m [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;21;01msklearn[39;00m[38;5;21;01m.[39;00m[38;5;21;01mlinear_model[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m LinearRegression
+[0;32m      5[0m [38;5;66;03m# Data X (variabel independen)[39;00m
+[0;32m      6[0m x [38;5;241m=[39m np[38;5;241m.[39marray([[38;5;241m2[39m, [38;5;241m4[39m, [38;5;241m3[39m, [38;5;241m3[39m, [38;5;241m3[39m, [38;5;241m4[39m, [38;5;241m5[39m])
 
 [1;31mModuleNotFoundError[0m: No module named 'sklearn'
 
