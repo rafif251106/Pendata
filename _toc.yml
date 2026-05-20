@@ -10,6 +10,7 @@ chapters:
 - file: Data-Preparation
 - file: Decision-Trees
 - file: Random-Forest
+- file: Linear-Regression
 - file: Modeling
 - file: Deployment
 - file: UTS
