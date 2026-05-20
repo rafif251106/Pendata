@@ -32,7 +32,7 @@
     <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=9c3e77be" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="_static/custom.css?v=174e0f65" />
@@ -431,8 +431,10 @@ document.write(`
 <div class="math notranslate nohighlight">
 \[ \hat{\beta} = (X^{T}X)^{-1}X^{T}Y \]</div>
 <ol class="arabic simple">
-<li><p>Matriks variabel independen (<span class="math notranslate nohighlight">\(X\)</span>) dan vektor target (<span class="math notranslate nohighlight">\(Y\)</span>):
-$<span class="math notranslate nohighlight">\(
+<li><p>Matriks variabel independen (<span class="math notranslate nohighlight">\(X\)</span>) dan vektor target (<span class="math notranslate nohighlight">\(Y\)</span>):</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[\begin{split}
 X = \begin{bmatrix}
 1 &amp; 2 \\
 1 &amp; 4 \\
@@ -451,46 +453,76 @@ Y = \begin{bmatrix}
 5 \\
 6
 \end{bmatrix}
-\)</span>$</p></li>
-<li><p>Transpose dari matriks <span class="math notranslate nohighlight">\(X\)</span>:
-$<span class="math notranslate nohighlight">\(
+\end{split}\]</div>
+<ol class="arabic simple" start="2">
+<li><p>Transpose dari matriks <span class="math notranslate nohighlight">\(X\)</span>:</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[\begin{split}
 X^T = \begin{bmatrix}
 1 &amp; 1 &amp; 1 &amp; 1 &amp; 1 &amp; 1 &amp; 1 \\
 2 &amp; 4 &amp; 3 &amp; 3 &amp; 3 &amp; 4 &amp; 5
 \end{bmatrix}
-\)</span>$</p></li>
-<li><p>Perkalian matriks <span class="math notranslate nohighlight">\(X^T\)</span> dengan <span class="math notranslate nohighlight">\(X\)</span>:
-$<span class="math notranslate nohighlight">\(
+\end{split}\]</div>
+<ol class="arabic simple" start="3">
+<li><p>Perkalian matriks <span class="math notranslate nohighlight">\(X^T\)</span> dengan <span class="math notranslate nohighlight">\(X\)</span>:</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[\begin{split}
 X^T X = \begin{bmatrix}
 7 &amp; 24 \\
 24 &amp; 88
 \end{bmatrix}
-\)</span>$</p></li>
-<li><p>Mencari nilai Determinan dari <span class="math notranslate nohighlight">\(X^T X\)</span>:
-$<span class="math notranslate nohighlight">\( \det(X^T X) = (7)(88) - (24)(24) \)</span><span class="math notranslate nohighlight">\(
-\)</span><span class="math notranslate nohighlight">\( \det(X^T X) = 616 - 576 = 40 \)</span>$</p></li>
-<li><p>Mencari matriks invers <span class="math notranslate nohighlight">\((X^T X)^{-1}\)</span>:
-$<span class="math notranslate nohighlight">\( (X^T X)^{-1} = \frac{1}{40} \begin{bmatrix} 88 &amp; -24 \\ -24 &amp; 7 \end{bmatrix} \)</span><span class="math notranslate nohighlight">\(
-\)</span><span class="math notranslate nohighlight">\( (X^T X)^{-1} = \begin{bmatrix} 2.2 &amp; -0.6 \\ -0.6 &amp; 0.175 \end{bmatrix} \)</span>$</p></li>
-<li><p>Perkalian matriks <span class="math notranslate nohighlight">\(X^T\)</span> dengan <span class="math notranslate nohighlight">\(Y\)</span>:
-$<span class="math notranslate nohighlight">\(
+\end{split}\]</div>
+<ol class="arabic simple" start="4">
+<li><p>Mencari nilai Determinan dari <span class="math notranslate nohighlight">\(X^T X\)</span>:</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[ \det(X^T X) = (7)(88) - (24)(24) \]</div>
+<div class="math notranslate nohighlight">
+\[ \det(X^T X) = 616 - 576 = 40 \]</div>
+<ol class="arabic simple" start="5">
+<li><p>Mencari matriks invers <span class="math notranslate nohighlight">\((X^T X)^{-1}\)</span>:</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[\begin{split} (X^T X)^{-1} = \frac{1}{40} \begin{bmatrix} 88 &amp; -24 \\ -24 &amp; 7 \end{bmatrix} \end{split}\]</div>
+<div class="math notranslate nohighlight">
+\[\begin{split} (X^T X)^{-1} = \begin{bmatrix} 2.2 &amp; -0.6 \\ -0.6 &amp; 0.175 \end{bmatrix} \end{split}\]</div>
+<ol class="arabic simple" start="6">
+<li><p>Perkalian matriks <span class="math notranslate nohighlight">\(X^T\)</span> dengan <span class="math notranslate nohighlight">\(Y\)</span>:</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[\begin{split}
 X^T Y = \begin{bmatrix}
 28 \\
 102
 \end{bmatrix}
-\)</span>$</p></li>
-<li><p>Menghitung estimasi koefisien regresi (<span class="math notranslate nohighlight">\(\hat{\beta}\)</span>):
-$<span class="math notranslate nohighlight">\( \hat{\beta} = (X^T X)^{-1} X^T Y \)</span><span class="math notranslate nohighlight">\(
-\)</span><span class="math notranslate nohighlight">\( \hat{\beta} = \begin{bmatrix} 2.2 &amp; -0.6 \\ -0.6 &amp; 0.175 \end{bmatrix} \begin{bmatrix} 28 \\ 102 \end{bmatrix} \)</span><span class="math notranslate nohighlight">\(
-\)</span><span class="math notranslate nohighlight">\( \hat{\beta} = \begin{bmatrix} (2.2)(28) + (-0.6)(102) \\ (-0.6)(28) + (0.175)(102) \end{bmatrix} \)</span><span class="math notranslate nohighlight">\(
-\)</span><span class="math notranslate nohighlight">\( \hat{\beta} = \begin{bmatrix} 61.6 - 61.2 \\ -16.8 + 17.85 \end{bmatrix} \)</span><span class="math notranslate nohighlight">\(
-\)</span><span class="math notranslate nohighlight">\( \hat{\beta} = \begin{bmatrix} 0.4 \\ 1.05 \end{bmatrix} \)</span>$</p></li>
-<li><p>Dari hasil di atas, kita mendapatkan nilai konstanta dan slope:
-$<span class="math notranslate nohighlight">\( \beta_0 = 0.4 \)</span><span class="math notranslate nohighlight">\(
-\)</span><span class="math notranslate nohighlight">\( \beta_1 = 1.05 \)</span>$</p></li>
-<li><p>Sehingga persamaan model regresi linearnya adalah:
-$<span class="math notranslate nohighlight">\( \hat{Y} = 1.05X + 0.4 \)</span>$</p></li>
+\end{split}\]</div>
+<ol class="arabic simple" start="7">
+<li><p>Menghitung estimasi koefisien regresi (<span class="math notranslate nohighlight">\(\hat{\beta}\)</span>):</p></li>
 </ol>
+<div class="math notranslate nohighlight">
+\[ \hat{\beta} = (X^T X)^{-1} X^T Y \]</div>
+<div class="math notranslate nohighlight">
+\[\begin{split} \hat{\beta} = \begin{bmatrix} 2.2 &amp; -0.6 \\ -0.6 &amp; 0.175 \end{bmatrix} \begin{bmatrix} 28 \\ 102 \end{bmatrix} \end{split}\]</div>
+<div class="math notranslate nohighlight">
+\[\begin{split} \hat{\beta} = \begin{bmatrix} (2.2)(28) + (-0.6)(102) \\ (-0.6)(28) + (0.175)(102) \end{bmatrix} \end{split}\]</div>
+<div class="math notranslate nohighlight">
+\[\begin{split} \hat{\beta} = \begin{bmatrix} 61.6 - 61.2 \\ -16.8 + 17.85 \end{bmatrix} \end{split}\]</div>
+<div class="math notranslate nohighlight">
+\[\begin{split} \hat{\beta} = \begin{bmatrix} 0.4 \\ 1.05 \end{bmatrix} \end{split}\]</div>
+<ol class="arabic simple" start="8">
+<li><p>Dari hasil di atas, kita mendapatkan nilai konstanta dan slope:</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[ \beta_0 = 0.4 \]</div>
+<div class="math notranslate nohighlight">
+\[ \beta_1 = 1.05 \]</div>
+<ol class="arabic simple" start="9">
+<li><p>Sehingga persamaan model regresi linearnya adalah:</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[ \hat{Y} = 1.05X + 0.4 \]</div>
 </section>
 <section id="hasil-perhitungan-excel">
 <h4>Hasil Perhitungan Excel<a class="headerlink" href="#hasil-perhitungan-excel" title="Link to this heading">#</a></h4>
