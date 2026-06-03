@@ -362,7 +362,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
 </div></div>
       
     </div>
@@ -378,6 +380,31 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pengumpukan-data">1. Pengumpukan Data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preproccessing-data">2. Preproccessing Data</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#a-missing-value">a. Missing Value</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#b-rata-rata-data-dan-mengubah-datetime">b. Rata-rata Data dan Mengubah Datetime</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#c-menyimpan-dalam-bentuk-csv">c. Menyimpan Dalam Bentuk CSV</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#d-pengecekan-missing-value-data-harian-pada-csv">d. Pengecekan Missing Value data harian pada CSV</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#e-deteksi-outlier-iqr">e. Deteksi Outlier IQR</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modeling-menggunakan-knn-regression">3. Modeling menggunakan KNN Regression</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#a-uji-korelasi-data">a. Uji Korelasi Data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#b-fitur-dengan-2-hari-sebelum">b. Fitur dengan 2 Hari Sebelum</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#c-normalisasi">c. Normalisasi</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#d-fitur-2-hari-sebelum-normalisasi">d. Fitur 2 Hari Sebelum (Normalisasi)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#e-modeling-dan-evaluation">e. Modeling dan Evaluation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#f-plotting">f. plotting</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -389,6 +416,11 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="time-series">
 <h1>Time-Series<a class="headerlink" href="#time-series" title="Link to this heading">#</a></h1>
+<section id="pengumpukan-data">
+<h2>1. Pengumpukan Data<a class="headerlink" href="#pengumpukan-data" title="Link to this heading">#</a></h2>
+<p>Pertama kita akan mengumpulkan data Time Series Harian kadar NO2 di daerah Bangkalan. Pengumpulan data dari sumber website <a class="reference external" href="https://dataspace.copernicus.eu/">https://dataspace.copernicus.eu/</a> , buat akun terlebih dahulu di website copernicus tersebut.</p>
+<p>Dokumentasi cara pengambilan data di <a class="reference external" href="https://documentation.dataspace.copernicus.eu/notebook-samples/openeo/NO2Covid.html">https://documentation.dataspace.copernicus.eu/notebook-samples/openeo/NO2Covid.html</a> .</p>
+<p>Pertama Install terlebih dahulu openeo</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">openeo</span>
@@ -406,6 +438,7 @@ document.write(`
 </div>
 </div>
 </div>
+<p>Lalu melakukan coneksi dengan kode dibawah</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">connection</span> <span class="o">=</span> <span class="n">openeo</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">&quot;openeo.dataspace.copernicus.eu&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">authenticate_oidc</span><span class="p">()</span>
@@ -418,6 +451,7 @@ document.write(`
 </div>
 </div>
 </div>
+<p>Untuk Mendapatkan data, membutuhkan koordinat dari daerah yang ingin diambil</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">aoi</span> <span class="o">=</span> <span class="p">{</span>
@@ -458,7 +492,7 @@ document.write(`
 
 <span class="n">s5post</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">load_collection</span><span class="p">(</span>
     <span class="s2">&quot;SENTINEL_5P_L2&quot;</span><span class="p">,</span>
-    <span class="n">temporal_extent</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;2023-10-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2025-10-01&quot;</span><span class="p">],</span>
+    <span class="n">temporal_extent</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;2024-01-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2026-06-01&quot;</span><span class="p">],</span>
     <span class="n">spatial_extent</span><span class="o">=</span><span class="p">{</span>
         <span class="s2">&quot;west&quot;</span><span class="p">:</span> <span class="mf">112.68</span><span class="p">,</span>
         <span class="s2">&quot;south&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">7.20</span><span class="p">,</span>
@@ -477,6 +511,9 @@ document.write(`
 </div>
 </div>
 </div>
+<p>Code diatas memerlukan titik koordinasi area yang akan diambil data -nya, untuk mengambil titik koordinasi kaian kunjungi webiste <a class="reference external" href="https://geojson.io/?map=14.13/-7.2/113.25#map=14.8/-7.04732/112.69463">https://geojson.io/?map=14.13/-7.2/113.25#map=14.8/-7.04732/112.69463</a> . Didalam website tersebut kalian akan memilih daerah dengan cara memberi shape kotak didaerah yang ingin kalian ambil datanya.</p>
+<p><img alt="Gambar Peta Koordinat" src="_images/koordinat.png" /></p>
+<p>Lakukan proses pengambilan data menggunakan code dibawah ini</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">job</span> <span class="o">=</span> <span class="n">s5post</span><span class="o">.</span><span class="n">execute_batch</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;NO2 in Sampang&quot;</span><span class="p">,</span> <span class="n">outputfile</span><span class="o">=</span><span class="s2">&quot;NO2Sampang.nc&quot;</span><span class="p">)</span>
@@ -484,31 +521,38 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0:00:00 Job &#39;j-2606030324264b0d900f50d65abd4b38&#39;: send &#39;start&#39;
-0:00:10 Job &#39;j-2606030324264b0d900f50d65abd4b38&#39;: queued (progress 0%)
-0:00:16 Job &#39;j-2606030324264b0d900f50d65abd4b38&#39;: queued (progress 0%)
-0:00:22 Job &#39;j-2606030324264b0d900f50d65abd4b38&#39;: queued (progress 0%)
-0:00:31 Job &#39;j-2606030324264b0d900f50d65abd4b38&#39;: queued (progress 0%)
-0:00:41 Job &#39;j-2606030324264b0d900f50d65abd4b38&#39;: queued (progress 0%)
-0:00:56 Job &#39;j-2606030324264b0d900f50d65abd4b38&#39;: running (progress N/A)
-0:01:11 Job &#39;j-2606030324264b0d900f50d65abd4b38&#39;: running (progress N/A)
-0:01:32 Job &#39;j-2606030324264b0d900f50d65abd4b38&#39;: running (progress N/A)
-0:01:56 Job &#39;j-2606030324264b0d900f50d65abd4b38&#39;: running (progress N/A)
-0:02:27 Job &#39;j-2606030324264b0d900f50d65abd4b38&#39;: running (progress N/A)
-0:03:05 Job &#39;j-2606030324264b0d900f50d65abd4b38&#39;: running (progress N/A)
-0:03:52 Job &#39;j-2606030324264b0d900f50d65abd4b38&#39;: running (progress N/A)
-0:04:51 Job &#39;j-2606030324264b0d900f50d65abd4b38&#39;: running (progress N/A)
-0:05:51 Job &#39;j-2606030324264b0d900f50d65abd4b38&#39;: running (progress N/A)
-0:06:52 Job &#39;j-2606030324264b0d900f50d65abd4b38&#39;: finished (progress 100%)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0:00:00 Job &#39;j-26060308213242c58db05c7de49ff4fe&#39;: send &#39;start&#39;
+0:00:11 Job &#39;j-26060308213242c58db05c7de49ff4fe&#39;: queued (progress 0%)
+0:00:17 Job &#39;j-26060308213242c58db05c7de49ff4fe&#39;: queued (progress 0%)
+0:00:23 Job &#39;j-26060308213242c58db05c7de49ff4fe&#39;: queued (progress 0%)
+0:00:32 Job &#39;j-26060308213242c58db05c7de49ff4fe&#39;: queued (progress 0%)
+0:00:42 Job &#39;j-26060308213242c58db05c7de49ff4fe&#39;: running (progress N/A)
+0:00:55 Job &#39;j-26060308213242c58db05c7de49ff4fe&#39;: running (progress N/A)
+0:01:10 Job &#39;j-26060308213242c58db05c7de49ff4fe&#39;: running (progress N/A)
+0:01:30 Job &#39;j-26060308213242c58db05c7de49ff4fe&#39;: running (progress N/A)
+0:01:54 Job &#39;j-26060308213242c58db05c7de49ff4fe&#39;: running (progress N/A)
+0:02:24 Job &#39;j-26060308213242c58db05c7de49ff4fe&#39;: running (progress N/A)
+0:03:02 Job &#39;j-26060308213242c58db05c7de49ff4fe&#39;: running (progress N/A)
+0:03:49 Job &#39;j-26060308213242c58db05c7de49ff4fe&#39;: running (progress N/A)
+0:04:48 Job &#39;j-26060308213242c58db05c7de49ff4fe&#39;: running (progress N/A)
+0:05:48 Job &#39;j-26060308213242c58db05c7de49ff4fe&#39;: running (progress N/A)
+0:06:49 Job &#39;j-26060308213242c58db05c7de49ff4fe&#39;: running (progress N/A)
+0:07:50 Job &#39;j-26060308213242c58db05c7de49ff4fe&#39;: finished (progress 100%)
 </pre></div>
 </div>
 </div>
 </div>
+<p>Ketika proses pengambilan data, aktivitas kalian akan terekam di halaman <a class="reference external" href="https://openeo.dataspace.copernicus.eu/?discover=0">https://openeo.dataspace.copernicus.eu/?discover=0</a> Disitu terdapat nama dataset dan status pengambilan data.</p>
+<p><img alt="Gambar proses ambil data" src="_images/openeo.png" /></p>
+</section>
+<section id="preproccessing-data">
+<h2>2. Preproccessing Data<a class="headerlink" href="#preproccessing-data" title="Link to this heading">#</a></h2>
+<p>Setelah kita mengambil data, data bisa diunduh di halaman <a class="reference external" href="https://editor.openeo.org/?server=https%3A%2F%2Fopeneo.dataspace.copernicus.eu%2Fopeneo%2F1.2">https://editor.openeo.org/?server=https%3A%2F%2Fopeneo.dataspace.copernicus.eu%2Fopeneo%2F1.2</a> . File akan berbentuk .nc. Kita cuman perlu kolom date dan NO2 menggunakan code dibawah:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">netCDF4</span>
 
-<span class="n">file_path</span> <span class="o">=</span> <span class="s2">&quot;data/NO2Sampang.nc&quot;</span>
+<span class="n">file_path</span> <span class="o">=</span> <span class="s2">&quot;data/NO2Sampang_2.nc&quot;</span>
 <span class="n">ds</span> <span class="o">=</span> <span class="n">netCDF4</span><span class="o">.</span><span class="n">Dataset</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
 
 <span class="c1"># Lihat seluruh variabel yang tersedia</span>
@@ -551,14 +595,15 @@ document.write(`
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>📦 Variabel dalam file:
 dict_keys([&#39;t&#39;, &#39;x&#39;, &#39;y&#39;, &#39;crs&#39;, &#39;NO2&#39;])
 &lt;class &#39;numpy.ma.MaskedArray&#39;&gt;
-725
+876
 9
 8
-3.7701793e-05
+3.1133957e-05
 </pre></div>
 </div>
 </div>
 </div>
+<p>Contoh 10 data pertama:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Contoh data pertama:&quot;</span><span class="p">)</span>
@@ -569,222 +614,150 @@ dict_keys([&#39;t&#39;, &#39;x&#39;, &#39;y&#39;, &#39;crs&#39;, &#39;NO2&#39;])
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Contoh data pertama:
-[[3.770179318962619e-05 4.4227883336134255e-05 2.893842975026928e-05
-  2.7030169803765602e-05 2.3806940589565784e-05 2.586452137620654e-05
-  1.6022562704165466e-05 9.385486009705346e-06]
- [3.770179318962619e-05 3.1096213206183165e-05 3.226231274311431e-05
-  2.7030169803765602e-05 2.2647607693215832e-05 3.680306326714344e-05
-  1.6022562704165466e-05 3.747334631043486e-05]
- [2.7158148441230878e-05 3.1096213206183165e-05 4.294700556783937e-05
-  2.0787138055311516e-05 2.2647607693215832e-05 3.6170044040773064e-05
-  2.544464950915426e-05 2.3946160581544973e-05]
- [2.9651806471520104e-05 3.772687341552228e-05 4.294700556783937e-05
-  5.6563803809694946e-05 4.394538700580597e-05 3.6170044040773064e-05
-  6.348737952066585e-05 3.904499681084417e-05]
- [2.9651806471520104e-05 4.1052295273402706e-05 -- 5.6563803809694946e-05
-  -- -- 6.348737952066585e-05 --]
- [3.303916673758067e-05 4.1052295273402706e-05 1.2694688848569058e-05 --
+[[3.113395723630674e-05 3.113395723630674e-05 -- -- -- -- -- --]
+ [5.017420699005015e-05 5.017420699005015e-05 -- -- -- -- -- --]
+ [5.017420699005015e-05 7.44911449146457e-05 -- -- -- -- -- --]
+ [7.44911449146457e-05 7.44911449146457e-05 -- -- -- -- -- --]
+ [-- -- -- -- -- -- -- --]
+ [-- -- -- -- -- -- -- --]
+ [-- -- -- -- -- -- -- --]
+ [-- -- -- -- -- -- -- --]
+ [7.092202577041462e-05 4.7315170377260074e-05 4.7315170377260074e-05
+  2.249634599138517e-05 2.249634599138517e-05 -- -- --]]
+[[-- -- -- -- -- -- -- --]
+ [-- -- -- -- -- -- -- --]
+ [-- -- -- -- -- -- -- --]
+ [-- -- -- -- -- -- -- --]
+ [-- -- -- -- -- -- -- --]
+ [-- -- -- -- -- -- -- --]
+ [-- -- -- -- -- -- -- --]
+ [-- -- -- -- -- -- -- --]
+ [-- -- -- -- -- -- -- --]]
+[[2.0626572222681716e-05 8.885500392352697e-06 1.8133399862563238e-05
+  5.306559387463494e-07 1.3535622201743536e-05 6.373936230374966e-06
+  1.816665280784946e-05 1.6458538084407337e-05]
+ [-- 3.1526760722044855e-05 1.8133399862563238e-05 9.383844371768646e-06
+  3.216925688320771e-05 1.2613259968929924e-05 1.816665280784946e-05
+  1.6458538084407337e-05]
+ [1.960100962605793e-05 -- -- 3.6803317016165238e-06
+  3.216925688320771e-05 3.4190969017799944e-05 -5.271194822853431e-07
+  -4.948486548528308e-06]
+ [-- -- -- -- 4.9439648137195036e-05 3.4190969017799944e-05
+  3.7007132050348446e-05 3.506868961267173e-05]
+ [-- -- -- -- -- -- 3.7007132050348446e-05 3.506868961267173e-05]
+ [-- -- -- -- -- -- -- --]
+ [-- -- -- -- -- -- -- --]
+ [-- -- -- -- -- -- -- --]
+ [-- -- -- -- -- -- -- --]]
+[[3.945931894122623e-05 -- -- 5.400789814302698e-05 3.910850136890076e-05
+  5.522001811186783e-05 1.4417097190744244e-05 2.261227746203076e-05]
+ [3.2371270208386704e-05 -- -- -- 3.910850136890076e-05 --
+  2.1151037799427286e-05 2.261227746203076e-05]
+ [3.2371270208386704e-05 -- -- -- -- -- -- --]
+ [-- -- -- -- -- -- -- --]
+ [-- -- -- -- -- -- -- --]
+ [-- -- -- -- 1.3838924132869579e-05 -- -- --]
+ [-- -- -- -- 2.0726676666527055e-05 3.543239290593192e-05 -- --]
+ [-- 5.5146796512417495e-05 -- 4.628232272807509e-05 --
+  3.543239290593192e-05 3.554748764145188e-05 3.829125489573926e-05]
+ [-- -- -- 4.628232272807509e-05 -- 3.0290286304079928e-05
+  3.554748764145188e-05 3.563307473086752e-05]]
+[[-- -- -- -- -- -- -- --]
+ [-- -- -- -- -- -- -- --]
+ [-- -- -- -- -- -- -- --]
+ [-- -- -- -- -- -- -- --]
+ [-- -- -- -- -- -- -- --]
+ [-- -- -- -- -- -- -- --]
+ [-- -- -- -- -- -- -- --]
+ [-- -- -- -- -- -- -- --]
+ [-- -- -- -- -- -- -- --]]
+[[-- -- -- -- -- -- -- --]
+ [-- -- -- -- -- -- -- --]
+ [-- -- -- -- -- -- -- --]
+ [-- -- -- -- -- -- -- --]
+ [-- -- -- -- -- -- -- --]
+ [-- -- -- -- -- -- -- --]
+ [-- -- -- -- -- -- -- --]
+ [-- -- -- -- -- -- -- --]
+ [-- -- -- -- -- -- -- --]]
+[[-- -- -- -- -- -- -- --]
+ [-- -- -- -- -- -- -- --]
+ [-- -- -- -- -- -- -- --]
+ [-- -- -- -- -- -- -- --]
+ [-- -- -- -- -- -- -- --]
+ [-- -- -- 1.2904381947009824e-05 2.4687160475878045e-05
+  2.4687160475878045e-05 -- --]
+ [-- -- -- -- 1.2904381947009824e-05 2.4687160475878045e-05 -- --]
+ [-- -- -- -- 2.252942977065686e-05 -- -- --]
+ [-- -- -- 5.0747552450047806e-05 3.168782131979242e-05 -- -- --]]
+[[1.822619560698513e-05 2.613885408209171e-05 3.540680336300284e-05
+  3.2203959563048556e-05 2.968486660392955e-05 3.9047390600899234e-05
+  1.8637236280483194e-05 2.3482996766688302e-05]
+ [3.232322706026025e-05 2.0642606614273973e-05 3.73318325728178e-05
+  4.5983048039488494e-05 3.890674270223826e-05 3.9047390600899234e-05
+  3.69591434719041e-05 3.348536483827047e-05]
+ [3.4510161640355363e-05 2.4441160348942503e-05 3.73318325728178e-05
+  4.061901563545689e-05 3.0785777198616415e-05 2.6346237063989975e-05
+  3.706483403220773e-05 3.348536483827047e-05]
+ [4.049334893352352e-05 6.430567736970261e-06 2.673254130058922e-05
+  2.693361784622539e-05 3.0785777198616415e-05 3.075463973800652e-05 --
+  2.1814385036122985e-05]
+ [3.320112591609359e-05 6.430567736970261e-06 3.795281008933671e-05
+  3.524174462654628e-05 2.6987683668266982e-05 3.075463973800652e-05 --
+  --]
+ [3.7727262679254636e-05 3.3276857720920816e-05 3.795281008933671e-05
+  3.524174462654628e-05 2.299580410181079e-05 -- -- --]
+ [3.7727262679254636e-05 3.3644810173427686e-05 4.414022987475619e-05
+  2.559859785833396e-05 2.299580410181079e-05 -- -- --]
+ [7.223803550004959e-05 3.3644810173427686e-05 4.020228152512573e-05
+  4.3940988689428195e-05 3.121564077446237e-05 -- -- --]
+ [0.00021735226619057357 4.605971116689034e-05 3.082447801716626e-05
+  4.3940988689428195e-05 3.651870065368712e-05 -- -- --]]
+[[1.9857656297972426e-05 1.3005127584619913e-05 3.600429045036435e-05
+  7.2853599704103544e-06 1.124691880249884e-05 2.0326609956100583e-05
+  1.81517971213907e-05 1.2080939086445142e-05]
+ [1.9857656297972426e-05 2.7495709218783304e-05 2.3916676582302898e-05
+  7.2853599704103544e-06 4.404450373840518e-05 3.126973024336621e-05
+  1.263000740436837e-05 3.243946048314683e-05]
+ [3.057238063775003e-05 2.7495709218783304e-05 3.858503623632714e-05
+  1.986346978810616e-05 4.404450373840518e-05 3.775891673285514e-05
+  3.055673369090073e-05 3.243946048314683e-05]
+ [2.198589027102571e-05 1.2192396752652712e-05 3.858503623632714e-05
+  1.1736291526176501e-05 2.4525221306248568e-05 3.775891673285514e-05
+  5.557840268011205e-05 1.890922249003779e-05]
+ [2.198589027102571e-05 2.5503512006253004e-05 1.838998832681682e-05
+  1.1736291526176501e-05 -- 4.704294406110421e-05 5.557840268011205e-05
+  5.399291694629937e-06]
+ [3.898744034813717e-05 2.954283991130069e-05 6.485068297479302e-05 -- --
+  -- -- 5.399291694629937e-06]
+ [4.0497510781278834e-05 3.328587263240479e-05 2.3868909920565784e-05 --
+  -- -- -- 2.4806418878142722e-05]
+ [4.0497510781278834e-05 4.197355156065896e-05 4.893339428235777e-05 --
   -- -- -- --]
- [1.5709914805484004e-05 3.258625611124444e-06 1.2694688848569058e-05
-  2.379269290031516e-06 -8.293241080536973e-06 -- 1.977533975150436e-05
-  --]
- [1.670708843448665e-05 2.8451442631194368e-05 3.690850644488819e-05
-  2.6973681087838486e-05 2.9640568754984997e-05 1.9493068975862116e-05
-  1.977533975150436e-05 2.4817900339257903e-05]
- [3.001221557497047e-05 2.8451442631194368e-05 1.732594500936102e-05
-  2.3390346541418694e-05 3.159448169753887e-05 2.6005562176578678e-05
-  2.4582381229265593e-05 2.4817900339257903e-05]]
-[[2.292313365614973e-05 3.167913746437989e-05 3.154170190100558e-05
-  3.154170190100558e-05 3.2178228138946e-05 3.2178228138946e-05
-  2.7656618840410374e-05 2.430473978165537e-05]
- [3.167913746437989e-05 3.167913746437989e-05 3.235163967474364e-05
-  3.235163967474364e-05 3.2178228138946e-05 2.2839258235762827e-05
-  2.430473978165537e-05 2.430473978165537e-05]
- [3.167913746437989e-05 2.9591998099931516e-05 3.235163967474364e-05
-  1.0305229807272553e-05 2.2839258235762827e-05 2.2839258235762827e-05 --
-  --]
- [2.9591998099931516e-05 9.805451554711908e-06 1.0305229807272553e-05
-  1.0305229807272553e-05 -- -- -- --]
- [9.805451554711908e-06 9.805451554711908e-06 1.5380688637378626e-05
-  1.5380688637378626e-05 -- 2.760508778010262e-06 -- --]
- [9.805451554711908e-06 2.3630022042198107e-05 1.5380688637378626e-05
-  2.525459240132477e-05 2.760508778010262e-06 2.760508778010262e-06
-  6.487173322966555e-06 6.487173322966555e-06]
- [2.3630022042198107e-05 2.754219894995913e-05 2.754219894995913e-05
-  2.525459240132477e-05 1.0709109119488858e-05 3.103401104453951e-05
-  3.103401104453951e-05 2.9767230444122106e-05]
- [4.458071998669766e-05 2.754219894995913e-05 2.625613342388533e-05
-  1.0709109119488858e-05 1.0709109119488858e-05 1.7483034753240645e-05
-  1.7483034753240645e-05 2.9767230444122106e-05]
- [4.458071998669766e-05 2.625613342388533e-05 2.625613342388533e-05
-  2.294184741913341e-05 2.294184741913341e-05 1.7483034753240645e-05
-  1.6716749087208882e-05 1.9475724911899306e-05]]
-[[2.1720452423323877e-05 2.9302424081834033e-05 2.9302424081834033e-05
-  1.2262202290003188e-05 1.2262202290003188e-05 1.1438644833106082e-05
-  1.1438644833106082e-05 1.376381806039717e-05]
- [2.9302424081834033e-05 2.9302424081834033e-05 2.9302424081834033e-05
-  1.7328145986539312e-05 1.7328145986539312e-05 1.6348963981727138e-05
-  1.6348963981727138e-05 1.7384130842401646e-05]
- [4.1134917410090566e-05 3.0340952434926294e-05 3.0340952434926294e-05
-  1.7328145986539312e-05 1.7328145986539312e-05 1.6348963981727138e-05
-  3.667009877972305e-05 8.2205133367097e-06]
- [3.745394496945664e-05 4.171005275566131e-05 4.171005275566131e-05 -- --
-  3.667009877972305e-05 3.667009877972305e-05 3.667009877972305e-05]
- [3.745394496945664e-05 4.171005275566131e-05 -- -- -- -- -- --]
- [4.377263758215122e-05 -- -- -- -- -- -- --]
- [5.561192301684059e-05 3.917545654985588e-06 3.917545654985588e-06
-  3.917545654985588e-06 -- -- -- --]
- [5.561192301684059e-05 3.917545654985588e-06 3.248131906730123e-05
-  3.248131906730123e-05 2.5844918127404526e-05 2.5844918127404526e-05
-  1.7732420019456185e-05 1.7732420019456185e-05]
- [6.15993922110647e-05 6.15993922110647e-05 3.248131906730123e-05
-  3.248131906730123e-05 9.604254046280403e-06 9.604254046280403e-06
-  1.6310186765622348e-05 1.6310186765622348e-05]]
-[[-- -- 3.6266388633521274e-05 2.2021864424459636e-05
-  2.2021864424459636e-05 3.0609662644565105e-05 1.8663518858375028e-05
-  9.586026862962171e-06]
- [-- -- -- -- 2.1542486138059758e-05 3.0609662644565105e-05
-  1.8663518858375028e-05 2.4105638658511452e-05]
- [-- -- -- -- -- -- -- 2.4105638658511452e-05]
- [-- -- -- -- -- -- -- --]
- [-- -- -- -- -- -- -- --]
- [-- -- -- -- -- -- -- --]
- [-- -- -- -- -8.114981937978882e-06 -- -- --]
- [1.3256585589260794e-05 -- 7.623657893418567e-06 1.2819242328987457e-05
-  1.2819242328987457e-05 -8.114981937978882e-06 1.1059440112148877e-05
-  1.1586063010327052e-05]
- [1.3256585589260794e-05 1.921409239002969e-05 1.921409239002969e-05
-  1.1632509995251894e-05 2.099935954902321e-05 9.704231160867494e-06
-  1.1059440112148877e-05 1.1586063010327052e-05]]
-[[4.1770887037273496e-05 2.2261785488808528e-05 -- 2.790916732919868e-05
-  2.8738284527207725e-05 2.570549440861214e-05 1.8498791177989915e-05
-  1.5133420674828812e-05]
- [-- 2.2261785488808528e-05 -- -- -- -- 1.8498791177989915e-05
-  1.5133420674828812e-05]
- [2.1543537513935007e-05 -- -- -- -- -- -- --]
- [2.1543537513935007e-05 -- -- -- -- -- -- --]
- [3.818318509729579e-05 -- -- -- -- -- -- --]
- [-- -- -- -- -- -- -- --]
- [-- 1.0072748409584165e-05 -- -- -- -- 1.0149389709113166e-05
-  8.00317309312959e-07]
- [2.2353162876243005e-06 1.0072748409584165e-05 -- 3.109184035565704e-05
-  1.1532478310982697e-05 2.404985934845172e-06 1.0149389709113166e-05
-  8.00317309312959e-07]
- [3.056499554077163e-05 2.8695234504994005e-05 1.54405406647129e-05
-  3.109184035565704e-05 1.1872314644278958e-05 1.8540640667197295e-05
-  8.735963092476595e-06 6.99856536812149e-06]]
-[[2.701143421290908e-05 2.7994838092126884e-05 2.7880472771357745e-05
-  2.9396271202131175e-05 2.044800203293562e-05 1.4391212062037084e-05
-  1.180577510240255e-05 1.896395224321168e-05]
- [2.701143421290908e-05 2.098978620779235e-05 2.1305522750481032e-05
-  2.9396271202131175e-05 2.044800203293562e-05 2.712751302169636e-05
-  3.770167313632555e-05 1.896395224321168e-05]
- [2.6871657610172406e-05 2.098978620779235e-05 -- 3.5969824239145964e-05
-  1.2527569197118282e-05 2.712751302169636e-05 2.9617929612868465e-05
-  1.3273730473883916e-05]
- [2.260132896481082e-05 2.6214776880806312e-05 -- 2.1592008124571294e-05
-  1.3796099665341899e-05 2.1326659407350235e-05 2.9617929612868465e-05
-  3.135521546937525e-05]
- [2.260132896481082e-05 1.8499960788176395e-05 8.587756383349188e-06
-  2.1592008124571294e-05 1.4014864063938148e-05 1.3826818758388981e-05
-  2.8361637305351906e-05 3.188986738678068e-05]
- [2.2605270714848302e-05 2.5870767785818316e-05 1.3612704606202897e-05
-  3.7452467950060964e-05 3.41187696903944e-05 1.3826818758388981e-05
-  2.7611102268565446e-05 2.680085162864998e-05]
- [1.287747363676317e-05 1.2984149179828819e-05 1.655376036069356e-05
-  3.7452467950060964e-05 2.363980638619978e-05 1.0346630915591959e-05
-  2.7611102268565446e-05 1.926199001900386e-05]
- [1.287747363676317e-05 2.4451801436953247e-05 2.7177979063708335e-05
-  3.799449768848717e-05 2.363980638619978e-05 1.7611764633329585e-05
-  4.347529466031119e-05 1.926199001900386e-05]
- [1.8953429389512166e-05 2.4451801436953247e-05 1.5476036423933692e-05
-  2.242095797555521e-05 1.8916467524832115e-05 1.7611764633329585e-05
-  2.8669292078120634e-05 1.8009926861850545e-05]]
-[[3.735810241778381e-05 3.2456042390549555e-05 2.3371407223748975e-05 --
+ [5.975784006295726e-05 4.197355156065896e-05 6.411170761566609e-05 -- --
+  -- -- --]]
+[[-- 3.11807707475964e-05 3.839704368147068e-05 3.839704368147068e-05 --
+  2.1997046133037657e-05 -- 2.1091842427267693e-05]
+ [-- 3.11807707475964e-05 -- -- -- 2.2526362954522483e-05 --
+  1.7949836546904407e-05]
+ [-- 2.6330533728469163e-05 2.6330533728469163e-05 2.447808947181329e-05
+  2.2526362954522483e-05 -- -- 1.7949836546904407e-05]
+ [-- 7.419070243486203e-06 7.419070243486203e-06 2.447808947181329e-05 --
+  -- -- 3.119452594546601e-05]
+ [-- 7.419070243486203e-06 2.422166107862722e-05 5.0924332754220814e-05
   -- -- -- --]
- [-- -- 2.3371407223748975e-05 -- -- -- -- --]
- [-- -- -- -- -- -- -- --]
- [-- -- -- -- -- -- -- --]
- [-- -- -- -- -- -- -2.0719690496662224e-07 --]
- [-- -- -- -- 6.8288654802017845e-06 -2.0719690496662224e-07
-  -2.0719690496662224e-07 1.3876130651624408e-05]
- [1.711778895696625e-05 -- 1.5880037608440034e-05 1.5880037608440034e-05
-  6.8288654802017845e-06 1.741915912134573e-05 1.741915912134573e-05
-  1.3876130651624408e-05]
- [2.9476868803612888e-05 6.415101324819261e-06 1.5880037608440034e-05
-  8.585888281231746e-06 1.9224073184886947e-05 1.9224073184886947e-05
-  1.0947288501483854e-05 1.761329622240737e-05]
- [2.9476868803612888e-05 2.184703407692723e-05 2.184703407692723e-05
-  8.585888281231746e-06 2.774379390757531e-05 2.774379390757531e-05
-  1.0947288501483854e-05 3.259978620917536e-05]]
-[[1.9509243429638445e-05 2.1528316210606135e-05 1.917620284075383e-05
-  1.917620284075383e-05 1.9108652850263752e-05 1.9108652850263752e-05 --
-  --]
- [1.9509243429638445e-05 2.1528316210606135e-05 2.1528316210606135e-05
-  2.3880462322267704e-05 2.3315800717682578e-05 2.3315800717682578e-05 --
-  --]
- [-- 5.106742537464015e-05 5.106742537464015e-05 2.3880462322267704e-05
-  2.3315800717682578e-05 2.9143664505681954e-05 -- --]
- [-- -- -- -- 2.9143664505681954e-05 2.9143664505681954e-05 -- --]
- [-- -- -- -- -- -- -- --]
- [-- -- -- -- -- -- -- --]
- [1.5064661056385376e-05 1.5064661056385376e-05 1.0902091162279248e-05
-  -2.1902376829530112e-05 -2.1902376829530112e-05 -- -- --]
- [2.4051700165728107e-05 1.5309768059523776e-05 2.667681110324338e-05
-  2.667681110324338e-05 1.57606991706416e-05 2.450400461384561e-05
-  2.450400461384561e-05 --]
- [3.688069409690797e-05 1.5309768059523776e-05 2.667681110324338e-05
-  2.667681110324338e-05 1.1903610356966965e-05 1.771676579664927e-05
-  1.771676579664927e-05 --]]
-[[3.393265069462359e-05 1.5114962479856331e-05 1.5114962479856331e-05
-  2.6043309844681062e-05 1.929131758515723e-05 2.671690526767634e-05
-  2.0970974219380878e-05 2.954722185677383e-05]
- [3.595165253500454e-05 2.1021323846071027e-05 2.1021323846071027e-05
-  1.9670645997393876e-05 2.671690526767634e-05 2.671690526767634e-05
-  2.0970974219380878e-05 3.04905443044845e-05]
- [3.595165253500454e-05 2.278993088111747e-05 3.2232317607849836e-05
-  3.9626233046874404e-05 -- -- 5.413753024186008e-05 3.04905443044845e-05]
- [2.278993088111747e-05 2.278993088111747e-05 3.2232317607849836e-05
-  3.9626233046874404e-05 -- -- -- --]
- [3.639998976723291e-05 3.395984094822779e-05 -- -- -- -- --
-  -2.093746616083081e-06]
- [3.639998976723291e-05 2.0801351638510823e-05 -- -- --
-  9.106131074076984e-06 -2.093746616083081e-06 -2.093746616083081e-06]
- [4.828356031794101e-05 2.0801351638510823e-05 -- 2.826172931236215e-06
-  1.0733197086665314e-05 2.150527507183142e-05 2.1017332983319648e-05
-  2.1017332983319648e-05]
- [2.626785499160178e-05 4.434605216374621e-06 2.826172931236215e-06
-  2.826172931236215e-06 1.0733197086665314e-05 2.150527507183142e-05
-  1.5542060282314196e-05 1.82973835762823e-05]
- [3.548795939423144e-05 2.2315129172056913e-05 2.2315129172056913e-05
-  9.845181921264157e-06 2.2580767108593136e-05 1.5542060282314196e-05
-  1.5542060282314196e-05 1.82973835762823e-05]]
-[[4.243070361553691e-05 4.215638546156697e-05 3.006721817655489e-05
-  1.6432066331617534e-05 1.729870928102173e-05 2.8771095458068885e-05
-  3.76270072592888e-05 3.397342879907228e-05]
- [2.717048118938692e-05 4.215638546156697e-05 3.006721817655489e-05
-  3.601563366828486e-05 3.1447267247131094e-05 3.0085915568633936e-05
-  3.76270072592888e-05 3.397342879907228e-05]
- [4.4751221139449626e-05 3.435651524341665e-05 3.331844709464349e-05
-  3.601563366828486e-05 -- 3.586881575756706e-05 -- --]
- [4.389587411424145e-05 4.727771010948345e-05 5.1003498811041936e-05 --
-  -- -- -- --]
- [4.585714123095386e-05 4.727771010948345e-05 -- -- -- -- -- --]
- [4.8487301683053374e-05 2.1167803424759768e-05 -- --
-  2.0335173758212477e-06 1.32948321152071e-06 1.8587421436677687e-05 --]
- [3.5261000448372215e-05 2.1257621483528055e-05 2.5400777303730138e-05
-  2.164004763471894e-05 1.8740758605417795e-05 1.32948321152071e-06
-  1.53643632074818e-05 2.218203735537827e-05]
- [3.5261000448372215e-05 2.1257621483528055e-05 1.6168662114068866e-05
-  1.690366661932785e-05 1.1711863407981582e-05 2.57402552961139e-05
-  1.53643632074818e-05 2.0459952793316916e-05]
- [6.573001883225515e-05 2.4088834834401496e-05 1.6168662114068866e-05
-  1.690366661932785e-05 3.05222965835128e-05 3.372471110196784e-05
-  3.522164115565829e-05 1.4380315406015143e-05]]
+ [2.383779428782873e-05 2.422166107862722e-05 2.422166107862722e-05 -- --
+  -- -- --]
+ [2.383779428782873e-05 -- -- -- -- -- -- --]
+ [5.839113873662427e-05 5.839113873662427e-05 -- -- -- -- -- --]
+ [-- -- -- -- -- -- -- --]]
 </pre></div>
 </div>
 </div>
 </div>
+<section id="a-missing-value">
+<h3>a. Missing Value<a class="headerlink" href="#a-missing-value" title="Link to this heading">#</a></h3>
+<p>Code ini akan mengisi missing value pada NO2 dengan metode Interpolasi Linear</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
@@ -804,6 +777,10 @@ dict_keys([&#39;t&#39;, &#39;x&#39;, &#39;y&#39;, &#39;crs&#39;, &#39;NO2&#39;])
 </div>
 </div>
 </div>
+</section>
+<section id="b-rata-rata-data-dan-mengubah-datetime">
+<h3>b. Rata-rata Data dan Mengubah Datetime<a class="headerlink" href="#b-rata-rata-data-dan-mengubah-datetime" title="Link to this heading">#</a></h3>
+<p>Setelah mengatasi missing value, kita akan me-rata-rata-kan data NO2 agar satu record hanya berupa single value. Sekalian kita mengambil date nya dan menaruh di array. Kita akan mengubah datetime dari awalnya (2023-10-04 00:00:00) menjadi (2023-10-04) karena kita mengambil data time series harian jadi kita tidak memerlukan data jam, menit dan detik.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">new_dates</span> <span class="o">=</span> <span class="p">[]</span>
@@ -817,6 +794,10 @@ dict_keys([&#39;t&#39;, &#39;x&#39;, &#39;y&#39;, &#39;crs&#39;, &#39;NO2&#39;])
 </div>
 </div>
 </div>
+</section>
+<section id="c-menyimpan-dalam-bentuk-csv">
+<h3>c. Menyimpan Dalam Bentuk CSV<a class="headerlink" href="#c-menyimpan-dalam-bentuk-csv" title="Link to this heading">#</a></h3>
+<p>Setelah itu kita akan membentuk data menjadi DataFrame Pandas untuk disimpan menjadi CSV.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
@@ -830,6 +811,10 @@ dict_keys([&#39;t&#39;, &#39;x&#39;, &#39;y&#39;, &#39;crs&#39;, &#39;NO2&#39;])
 </div>
 </div>
 </div>
+</section>
+<section id="d-pengecekan-missing-value-data-harian-pada-csv">
+<h3>d. Pengecekan Missing Value data harian pada CSV<a class="headerlink" href="#d-pengecekan-missing-value-data-harian-pada-csv" title="Link to this heading">#</a></h3>
+<p>Sekarang setelah data berbentuk CSV, kita cek apakah data Time Series harian lengkap. Cara men-cek apakah data Time Series Harian lengkap gunakan code dibawah:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
@@ -841,8 +826,8 @@ dict_keys([&#39;t&#39;, &#39;x&#39;, &#39;y&#39;, &#39;crs&#39;, &#39;NO2&#39;])
 <span class="n">df</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">])</span>
 
 <span class="c1"># Buat rentang tanggal lengkap</span>
-<span class="n">start_date</span> <span class="o">=</span> <span class="s2">&quot;2023-10-01&quot;</span>
-<span class="n">end_date</span> <span class="o">=</span> <span class="s2">&quot;2025-09-30&quot;</span>
+<span class="n">start_date</span> <span class="o">=</span> <span class="s2">&quot;2024-01-01&quot;</span>
+<span class="n">end_date</span> <span class="o">=</span> <span class="s2">&quot;2026-06-01&quot;</span>
 <span class="n">full_range</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">date_range</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="n">start_date</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="n">end_date</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="s1">&#39;D&#39;</span><span class="p">)</span>
 
 <span class="c1"># Cek tanggal yang hilang</span>
@@ -855,15 +840,16 @@ dict_keys([&#39;t&#39;, &#39;x&#39;, &#39;y&#39;, &#39;crs&#39;, &#39;NO2&#39;])
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Jumlah hari missing: 6
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Jumlah hari missing: 7
 Daftar tanggal missing:
-DatetimeIndex([&#39;2023-11-11&#39;, &#39;2024-01-01&#39;, &#39;2024-03-23&#39;, &#39;2024-08-12&#39;,
-               &#39;2025-01-30&#39;, &#39;2025-01-31&#39;],
+DatetimeIndex([&#39;2024-01-01&#39;, &#39;2024-03-23&#39;, &#39;2024-08-12&#39;, &#39;2025-01-30&#39;,
+               &#39;2025-01-31&#39;, &#39;2026-02-24&#39;, &#39;2026-06-01&#39;],
               dtype=&#39;datetime64[ns]&#39;, freq=None)
 </pre></div>
 </div>
 </div>
 </div>
+<p>Dalam data saya terdapat 7 missing value. Kita akan mengatasi lagi missing value menggunakan metode Interpolasi Linear. Cara memperbaikinya gunakan code dibawah:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
@@ -873,7 +859,7 @@ DatetimeIndex([&#39;2023-11-11&#39;, &#39;2024-01-01&#39;, &#39;2024-03-23&#39;,
 <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;date&#39;</span><span class="p">)</span>
 
 <span class="c1"># Buat rentang tanggal lengkap</span>
-<span class="n">full_range</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">date_range</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="s2">&quot;2023-10-01&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;2025-09-30&quot;</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="s1">&#39;D&#39;</span><span class="p">)</span>
+<span class="n">full_range</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">date_range</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="s2">&quot;2024-01-01&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;2026-06-01&quot;</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="s1">&#39;D&#39;</span><span class="p">)</span>
 
 <span class="c1"># Reindex agar tanggal yang hilang muncul sebagai NaN</span>
 <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;date&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">full_range</span><span class="p">)</span>
@@ -891,7 +877,7 @@ DatetimeIndex([&#39;2023-11-11&#39;, &#39;2024-01-01&#39;, &#39;2024-03-23&#39;,
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\asus\AppData\Local\Temp\ipykernel_4288\2413223189.py:18: FutureWarning: Series.fillna with &#39;method&#39; is deprecated and will raise in a future version. Use obj.ffill() or obj.bfill() instead.
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\asus\AppData\Local\Temp\ipykernel_4288\2706884923.py:18: FutureWarning: Series.fillna with &#39;method&#39; is deprecated and will raise in a future version. Use obj.ffill() or obj.bfill() instead.
   df[&#39;NO2&#39;] = df[&#39;NO2&#39;].fillna(method=&#39;bfill&#39;).fillna(method=&#39;ffill&#39;)
 </pre></div>
 </div>
@@ -908,8 +894,8 @@ DatetimeIndex([&#39;2023-11-11&#39;, &#39;2024-01-01&#39;, &#39;2024-03-23&#39;,
 <span class="n">df</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">])</span>
 
 <span class="c1"># Buat rentang tanggal lengkap</span>
-<span class="n">start_date</span> <span class="o">=</span> <span class="s2">&quot;2023-10-01&quot;</span>
-<span class="n">end_date</span> <span class="o">=</span> <span class="s2">&quot;2025-09-30&quot;</span>
+<span class="n">start_date</span> <span class="o">=</span> <span class="s2">&quot;2024-01-01&quot;</span>
+<span class="n">end_date</span> <span class="o">=</span> <span class="s2">&quot;2026-06-01&quot;</span>
 <span class="n">full_range</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">date_range</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="n">start_date</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="n">end_date</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="s1">&#39;D&#39;</span><span class="p">)</span>
 
 <span class="c1"># Cek tanggal yang hilang</span>
@@ -929,6 +915,11 @@ DatetimeIndex([], dtype=&#39;datetime64[ns]&#39;, freq=&#39;D&#39;)
 </div>
 </div>
 </div>
+<p>Setelah dicek missing value sudah tidak ada lagi missing value</p>
+</section>
+<section id="e-deteksi-outlier-iqr">
+<h3>e. Deteksi Outlier IQR<a class="headerlink" href="#e-deteksi-outlier-iqr" title="Link to this heading">#</a></h3>
+<p>Setelah kita mengisi missing value menggunakan metode Interpolasi Linear, selanjutnya kita akan mendeteksi Outlier menggunakan metode IQR.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
@@ -956,17 +947,15 @@ DatetimeIndex([], dtype=&#39;datetime64[ns]&#39;, freq=&#39;D&#39;)
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Jumlah Outlier (IQR): 14
-         date       NO2
-45 2023-11-15  0.000051
-46 2023-11-16  0.000044
-48 2023-11-18  0.000051
-67 2023-12-07  0.000047
-68 2023-12-08  0.000045
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Jumlah Outlier (IQR): 2
+          date       NO2
+262 2024-09-19  0.000077
+290 2024-10-17  0.000047
 </pre></div>
 </div>
 </div>
 </div>
+<p>Visualisasi Outlier:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># === Visualisasi ===</span>
@@ -996,9 +985,10 @@ DatetimeIndex([], dtype=&#39;datetime64[ns]&#39;, freq=&#39;D&#39;)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/bd89326f3ccf330f68783a6c27fb5849b835668a54e7db68814334b8918c99e9.png" src="_images/bd89326f3ccf330f68783a6c27fb5849b835668a54e7db68814334b8918c99e9.png" />
+<img alt="_images/ae3fccc9b782192c7322b6c18df79c7aca91d59b041f8e79b45a666e3bd75f4c.png" src="_images/ae3fccc9b782192c7322b6c18df79c7aca91d59b041f8e79b45a666e3bd75f4c.png" />
 </div>
 </div>
+<p>Setelah itu, kita akan menghapus data outlier. Karena data ini merupakan data Time Series, maka data outlier yang dihapus akan diisi kembali menggunakan Interpolasi Linear.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Tandai outlier menjadi NaN</span>
@@ -1018,12 +1008,13 @@ DatetimeIndex([], dtype=&#39;datetime64[ns]&#39;, freq=&#39;D&#39;)
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Jumlah nilai yang dinyatakan sebagai outlier: 14
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Jumlah nilai yang dinyatakan sebagai outlier: 2
 Jumlah missing setelah interpolasi: 0
 </pre></div>
 </div>
 </div>
 </div>
+<p>Visualisasi data setelah menghapus Outlier dan mengisi kembali menggunakan Interpolasi Linear:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
@@ -1045,9 +1036,17 @@ Jumlah missing setelah interpolasi: 0
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/e0e9b1ea85c5c670987ad2610a6f0b26ec4c85c125ea898effb21d3213abd366.png" src="_images/e0e9b1ea85c5c670987ad2610a6f0b26ec4c85c125ea898effb21d3213abd366.png" />
+<img alt="_images/b57bbceb4261ceb3020a3038465550ba4cebc95f8a47d3b6353dda6db82705e1.png" src="_images/b57bbceb4261ceb3020a3038465550ba4cebc95f8a47d3b6353dda6db82705e1.png" />
 </div>
 </div>
+</section>
+</section>
+<section id="modeling-menggunakan-knn-regression">
+<h2>3. Modeling menggunakan KNN Regression<a class="headerlink" href="#modeling-menggunakan-knn-regression" title="Link to this heading">#</a></h2>
+<p>Dengan data Time Series kadar NO2 harian di daerah Bangkalan, kita akan memprediksi kadar NO2 satu hari yang akan datang. Sekarang kita akan ubah data, mencoba mencari korelasi antara 1 hari dengan 4 hari sebelumnya. Kita juga akan membandingkan apakah semakin banyak hari sebelumnya, model akan lebih bagus?</p>
+<section id="a-uji-korelasi-data">
+<h3>a. Uji Korelasi Data<a class="headerlink" href="#a-uji-korelasi-data" title="Link to this heading">#</a></h3>
+<p>Sebelum masuk ke modeling, data kita merupakan data unsupervised yang berarti tidak ada label. Kita ubah data menjadi supervised lalu uji korelasi terhadap label (t). Fitur-fitur nya merupakan 30 hari sebelum (t-30, t-29, … t-1) dan label (t).</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
@@ -1072,7 +1071,7 @@ Jumlah missing setelah interpolasi: 0
 <span class="n">df_temukan</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;date&#39;</span><span class="p">)</span> 
 
 <span class="c1"># 2. PERBAIKAN: Gunakan df_temukan, BUKAN df asli</span>
-<span class="n">supervised_df30</span> <span class="o">=</span> <span class="n">create_supervised</span><span class="p">(</span><span class="n">df_temukan</span><span class="p">[</span><span class="s1">&#39;NO2_filled&#39;</span><span class="p">],</span> <span class="n">n_lag</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">supervised_df30</span> <span class="o">=</span> <span class="n">create_supervised</span><span class="p">(</span><span class="n">df_temukan</span><span class="p">[</span><span class="s1">&#39;NO2_filled&#39;</span><span class="p">],</span> <span class="n">n_lag</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
 
 <span class="c1"># 3. Kembalikan index menjadi kolom &#39;date&#39; biasa</span>
 <span class="n">supervised_df30</span> <span class="o">=</span> <span class="n">supervised_df30</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
@@ -1087,25 +1086,46 @@ Jumlah missing setelah interpolasi: 0
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NO2(t-2)    0.672812
-NO2(t-1)    0.795201
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NO2(t-30)    0.357919
+NO2(t-29)    0.382159
+NO2(t-28)    0.397963
+NO2(t-27)    0.389311
+NO2(t-26)    0.368346
+NO2(t-25)    0.355596
+NO2(t-24)    0.337131
+NO2(t-23)    0.329784
+NO2(t-22)    0.328610
+NO2(t-21)    0.323277
+NO2(t-20)    0.314051
+NO2(t-19)    0.305519
+NO2(t-18)    0.307687
+NO2(t-17)    0.309471
+NO2(t-16)    0.331466
+NO2(t-15)    0.349176
+NO2(t-14)    0.368193
+NO2(t-13)    0.379439
+NO2(t-12)    0.392336
+NO2(t-11)    0.417663
+NO2(t-10)    0.451692
+NO2(t-9)     0.478882
+NO2(t-8)     0.502193
+NO2(t-7)     0.515276
+NO2(t-6)     0.533471
+NO2(t-5)     0.566419
+NO2(t-4)     0.609592
+NO2(t-3)     0.673632
+NO2(t-2)     0.753241
+NO2(t-1)     0.863302
 dtype: float64
 </pre></div>
 </div>
 </div>
 </div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.preprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">MinMaxScaler</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
-
-<span class="n">scaler</span> <span class="o">=</span> <span class="n">MinMaxScaler</span><span class="p">()</span>
-
-<span class="n">df</span><span class="p">[</span><span class="s1">&#39;NO2_filled&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">df</span><span class="p">[[</span><span class="s1">&#39;NO2&#39;</span><span class="p">]])</span>
-</pre></div>
-</div>
-</div>
-</div>
+<p>Skala nilai uji korelasi itu dari -1 sampai 1, namun kita ambil nilai uji korelasi yang terbaik yaitu lebih dari 0.5 yaitu fitur t-1 sampai t-4.</p>
+</section>
+<section id="b-fitur-dengan-2-hari-sebelum">
+<h3>b. Fitur dengan 2 Hari Sebelum<a class="headerlink" href="#b-fitur-dengan-2-hari-sebelum" title="Link to this heading">#</a></h3>
+<p>Fitur dengan 2 hari sebelum, tanpa normalisasi</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">supervised_df</span> <span class="o">=</span> <span class="n">create_supervised</span><span class="p">(</span><span class="n">df_temukan</span><span class="p">[</span><span class="s1">&#39;NO2_filled&#39;</span><span class="p">],</span> <span class="n">n_lag</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
@@ -1119,51 +1139,66 @@ dtype: float64
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>          date  NO2(t-2)  NO2(t-1)    NO2(t)
-0   2023-10-03  0.238203  0.192840  0.196854
-1   2023-10-04  0.192840  0.196854  0.149560
-2   2023-10-05  0.196854  0.149560  0.154247
-3   2023-10-06  0.149560  0.154247  0.185625
-4   2023-10-07  0.154247  0.185625  0.152010
+0   2024-01-03  0.000031  0.000031  0.000031
+1   2024-01-04  0.000031  0.000031  0.000030
+2   2024-01-05  0.000031  0.000030  0.000033
+3   2024-01-06  0.000030  0.000033  0.000033
+4   2024-01-07  0.000033  0.000033  0.000034
 ..         ...       ...       ...       ...
-724 2025-09-26  0.372653  0.145997  0.094458
-725 2025-09-27  0.145997  0.094458  0.089599
-726 2025-09-28  0.094458  0.089599  0.000000
-727 2025-09-29  0.089599  0.000000  0.014405
-728 2025-09-30  0.000000  0.014405  0.014405
+876 2026-05-28  0.000043  0.000036  0.000042
+877 2026-05-29  0.000036  0.000042  0.000042
+878 2026-05-30  0.000042  0.000042  0.000034
+879 2026-05-31  0.000042  0.000034  0.000027
+880 2026-06-01  0.000034  0.000027  0.000027
 
-[729 rows x 4 columns]
-(729, 4)
+[881 rows x 4 columns]
+(881, 4)
 </pre></div>
 </div>
 </div>
 </div>
+</section>
+<section id="c-normalisasi">
+<h3>c. Normalisasi<a class="headerlink" href="#c-normalisasi" title="Link to this heading">#</a></h3>
+<p>karena kita menggunakan model KNN Regression, maka perlu normalisasi data menggunakan min-max Scaler.</p>
+</section>
+<section id="d-fitur-2-hari-sebelum-normalisasi">
+<h3>d. Fitur 2 Hari Sebelum (Normalisasi)<a class="headerlink" href="#d-fitur-2-hari-sebelum-normalisasi" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">supervised_df</span> <span class="o">=</span> <span class="n">create_supervised</span><span class="p">(</span><span class="n">df_temukan</span><span class="p">[</span><span class="s1">&#39;NO2_filled&#39;</span><span class="p">],</span> <span class="n">n_lag</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">supervised_df</span> <span class="o">=</span> <span class="n">supervised_df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+<span class="n">supervised_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;supervised_data_2_hari_normalisasi.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
-<span class="c1"># Pastikan datetime dan sorting</span>
-<span class="n">df</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">])</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;date&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">supervised_df</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">supervised_df</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>          date  NO2(t-2)  NO2(t-1)    NO2(t)
+0   2024-01-03  0.307350  0.307350  0.298695
+1   2024-01-04  0.307350  0.298695  0.290039
+2   2024-01-05  0.298695  0.290039  0.335483
+3   2024-01-06  0.290039  0.335483  0.339013
+4   2024-01-07  0.335483  0.339013  0.342542
+..         ...       ...       ...       ...
+876 2026-05-28  0.481052  0.383071  0.470317
+877 2026-05-29  0.383071  0.470317  0.462708
+878 2026-05-30  0.470317  0.462708  0.346308
+879 2026-05-31  0.462708  0.346308  0.235636
+880 2026-06-01  0.346308  0.235636  0.235636
 
-<span class="c1"># Buat rentang tanggal lengkap</span>
-<span class="n">full_range</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">date_range</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="s2">&quot;2023-10-01&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;2025-09-30&quot;</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="s1">&#39;D&#39;</span><span class="p">)</span>
-
-<span class="c1"># Reindex agar tanggal yang hilang muncul sebagai NaN</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;date&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">full_range</span><span class="p">)</span>
-<span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;date&#39;</span>
-
-<span class="c1"># Interpolasi linear berdasarkan indeks waktu</span>
-<span class="n">df</span><span class="p">[</span><span class="s1">&#39;NO2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;NO2&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;time&#39;</span><span class="p">)</span>
-
-<span class="c1"># (Opsional) jika masih ada NaN di bagian awal/akhir bisa gunakan forward/backward fill</span>
-<span class="n">df</span><span class="p">[</span><span class="s1">&#39;NO2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;NO2&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;bfill&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;ffill&#39;</span><span class="p">)</span>
-
-<span class="c1"># Simpan kembali ke CSV</span>
-<span class="n">supervised_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;no2_timeseries_interpolated.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+[881 rows x 4 columns]
+(881, 4)
 </pre></div>
 </div>
 </div>
 </div>
+</section>
+<section id="e-modeling-dan-evaluation">
+<h3>e. Modeling dan Evaluation<a class="headerlink" href="#e-modeling-dan-evaluation" title="Link to this heading">#</a></h3>
+<p>Sekarang dari 2 data yang sudah kita rubah, kita train menggunakan model KNN Regression.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.neighbors</span><span class="w"> </span><span class="kn">import</span> <span class="n">KNeighborsRegressor</span>
@@ -1178,18 +1213,21 @@ dtype: float64
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">((</span><span class="n">y_true</span><span class="p">[</span><span class="n">nonzero</span><span class="p">]</span> <span class="o">-</span> <span class="n">y_pred</span><span class="p">[</span><span class="n">nonzero</span><span class="p">])</span> <span class="o">/</span> <span class="n">y_true</span><span class="p">[</span><span class="n">nonzero</span><span class="p">]))</span> <span class="o">*</span> <span class="mi">100</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">train_knn</span><span class="p">(</span><span class="n">df_supervised</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
-    <span class="c1"># Pisahkan fitur &amp; label</span>
-    <span class="n">X</span> <span class="o">=</span> <span class="n">df_supervised</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;NO2(t)&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">values</span>
+    <span class="c1"># 1. PERBAIKAN: Deteksi dan buang kolom &#39;date&#39; atau index jika dia ikut ter-reset</span>
+    <span class="n">kolom_dibuang</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">,</span> <span class="s1">&#39;index&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df_supervised</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
+    
+    <span class="c1"># Pisahkan fitur (X) tanpa melibatkan kolom tanggal</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">df_supervised</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">kolom_dibuang</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;NO2(t)&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">values</span>
     <span class="n">y</span> <span class="o">=</span> <span class="n">df_supervised</span><span class="p">[</span><span class="s1">&#39;NO2(t)&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
 
-    <span class="c1"># Split data 80/20</span>
+    <span class="c1"># Split data 80/20 (Tanpa shuffle untuk data deret waktu)</span>
     <span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
         <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span>
     <span class="p">)</span>
 
     <span class="c1"># Model KNN</span>
     <span class="n">knn</span> <span class="o">=</span> <span class="n">KNeighborsRegressor</span><span class="p">(</span><span class="n">n_neighbors</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-    <span class="n">knn</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+    <span class="n">knn</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span> <span class="c1"># Sekarang aman dari error Timestamp!</span>
 
     <span class="c1"># Prediksi</span>
     <span class="n">y_pred</span> <span class="o">=</span> <span class="n">knn</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
@@ -1219,20 +1257,42 @@ dtype: float64
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>=== KNN - 4 Hari Sebelumnya ===
-Train Size: 581 — Test Size: 146
-RMSE: 0.065457
-R² Score: 0.1399
-MAPE: 61.0796%
+Train Size: 704 — Test Size: 177
+RMSE: 0.057866
+R² Score: 0.7084
+MAPE: 16.0757%
 
 === KNN - 10 Hari Sebelumnya ===
-Train Size: 581 — Test Size: 146
-RMSE: 0.065457
-R² Score: 0.1399
-MAPE: 61.0796%
+Train Size: 704 — Test Size: 177
+RMSE: 0.057866
+R² Score: 0.7084
+MAPE: 16.0757%
 </pre></div>
 </div>
 </div>
 </div>
+<p>Berdasarkan hasil arkurasi diatas menjunjukkan bahwa lebih banyak hari sebelumnya maka model semakin bagus. Kita coba gunakan data 30 hari sebelumnya juga untuk melihat apakah semakin banyak hari sebelumnya, model semakin baik?</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">knn_30</span><span class="p">,</span> <span class="n">y_test_30</span><span class="p">,</span> <span class="n">y_pred_30</span> <span class="o">=</span> <span class="n">train_knn</span><span class="p">(</span><span class="n">supervised_df30</span><span class="p">,</span> <span class="s2">&quot;KNN - 30 Hari Sebelumnya&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>=== KNN - 30 Hari Sebelumnya ===
+Train Size: 682 — Test Size: 171
+RMSE: 0.000006
+R² Score: 0.3754
+MAPE: 16.2241%
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="f-plotting">
+<h3>f. plotting<a class="headerlink" href="#f-plotting" title="Link to this heading">#</a></h3>
+<p>Plotting untuk visualisasi grafik antara label dan prediksi dari kedua data diatas.</p>
+<p>4 hari sebelum:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
@@ -1250,9 +1310,47 @@ MAPE: 61.0796%
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/f588bda503be68d735199458c4013a71cdd4f7446084c441b5b5dee4ec919782.png" src="_images/f588bda503be68d735199458c4013a71cdd4f7446084c441b5b5dee4ec919782.png" />
+<img alt="_images/fe2716d900981eda12971a040717caa3d47a18962ad012d987fea70c94a37ac6.png" src="_images/fe2716d900981eda12971a040717caa3d47a18962ad012d987fea70c94a37ac6.png" />
 </div>
 </div>
+<p>10 hari sebelum:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y_test_10</span><span class="p">)),</span> <span class="n">y_test_10</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Actual&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y_pred_10</span><span class="p">)),</span> <span class="n">y_pred_10</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Predicted&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;KNN Regression - 10 Hari Sebelumnya&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Sample Index&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;NO2 Value&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/2a98eed151afc591075a0cd2e8f56446bdff528f668bec2910f87d53b2c45a44.png" src="_images/2a98eed151afc591075a0cd2e8f56446bdff528f668bec2910f87d53b2c45a44.png" />
+</div>
+</div>
+<p>30 hari sebelum</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y_test_30</span><span class="p">)),</span> <span class="n">y_test_30</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Actual&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y_pred_30</span><span class="p">)),</span> <span class="n">y_pred_30</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Predicted&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;KNN Regression - 30 Hari Sebelumnya&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Sample Index&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;NO2 Value&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/f481d49a31b17a4c25a6a8c44ba0869a8045c8e425b3f9ce898afcf2b048ae0b.png" src="_images/f481d49a31b17a4c25a6a8c44ba0869a8045c8e425b3f9ce898afcf2b048ae0b.png" />
+</div>
+</div>
+</section>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -1309,6 +1407,38 @@ MAPE: 61.0796%
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pengumpukan-data">1. Pengumpukan Data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preproccessing-data">2. Preproccessing Data</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#a-missing-value">a. Missing Value</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#b-rata-rata-data-dan-mengubah-datetime">b. Rata-rata Data dan Mengubah Datetime</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#c-menyimpan-dalam-bentuk-csv">c. Menyimpan Dalam Bentuk CSV</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#d-pengecekan-missing-value-data-harian-pada-csv">d. Pengecekan Missing Value data harian pada CSV</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#e-deteksi-outlier-iqr">e. Deteksi Outlier IQR</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modeling-menggunakan-knn-regression">3. Modeling menggunakan KNN Regression</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#a-uji-korelasi-data">a. Uji Korelasi Data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#b-fitur-dengan-2-hari-sebelum">b. Fitur dengan 2 Hari Sebelum</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#c-normalisasi">c. Normalisasi</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#d-fitur-2-hari-sebelum-normalisasi">d. Fitur 2 Hari Sebelum (Normalisasi)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#e-modeling-dan-evaluation">e. Modeling dan Evaluation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#f-plotting">f. plotting</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>
