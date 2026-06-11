@@ -403,6 +403,28 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#partial-dependence-plots">Partial dependence plots</a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#jawaban-pertanyaan">Jawaban Pertanyaan</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#analisa-predikisi-tentang-apa">1. Analisa predikisi  tentang apa?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bagaimana-bentuk-data-trainingnya-apa-saja-inputnya-dan-apa-outputnya">2. Bagaimana bentuk data trainingnya ( apa saja inputnya dan apa outputnya)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#contoh-data">Contoh Data:</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#apa-itu-lag">3. Apa itu lag?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#jelaskan-proses-analisis-yang-dilakukan-dari-kasus-diatas">4. Jelaskan proses analisis yang dilakukan dari kasus diatas</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tahap-1-mengambil-data">Tahap 1 Mengambil Data</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tahap-2-pembuatan-dan-pelatihan-model">Tahap 2 Pembuatan dan Pelatihan Model</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#pembuatan-matriks-autoregresif">Pembuatan Matriks Autoregresif</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#pelatihan-model-dengan-algoritma-lightgbm-regressor">Pelatihan Model dengan Algoritma LightGBM Regressor.</a></li>
+</ul>
+</li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tahap-3-model-specific-feature-importance">Tahap 3 Model-Specific Feature Importance</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tahap-4-analisis-shap">Tahap 4 Analisis SHAP</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tahap-5-permutation-feature-importance">Tahap 5 Permutation Feature Importance</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tahap-6-partial-dependence-plots">Tahap 6 Partial Dependence Plots</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
             </nav>
         </div>
@@ -420,9 +442,7 @@ document.write(`
 <h2>Library dan Data<a class="headerlink" href="#library-dan-data" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Libraries</span>
-<span class="c1"># ==============================================================================</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">shap</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.inspection</span><span class="w"> </span><span class="kn">import</span> <span class="n">permutation_importance</span>
@@ -436,12 +456,12 @@ document.write(`
 <div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
 <span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">5</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
-<span class="ne">----&gt; </span><span class="mi">5</span> <span class="kn">import</span><span class="w"> </span><span class="nn">shap</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.inspection</span><span class="w"> </span><span class="kn">import</span> <span class="n">permutation_importance</span>
-<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.inspection</span><span class="w"> </span><span class="kn">import</span> <span class="n">PartialDependenceDisplay</span>
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">3</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="ne">----&gt; </span><span class="mi">3</span> <span class="kn">import</span><span class="w"> </span><span class="nn">shap</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.inspection</span><span class="w"> </span><span class="kn">import</span> <span class="n">permutation_importance</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.inspection</span><span class="w"> </span><span class="kn">import</span> <span class="n">PartialDependenceDisplay</span>
 
 <span class="ne">ModuleNotFoundError</span>: No module named &#39;shap&#39;
 </pre></div>
@@ -450,9 +470,7 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Download data</span>
-<span class="c1"># ==============================================================================</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">fetch_dataset</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;vic_electricity&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">fetch_dataset</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;vic_electricity&quot;</span><span class="p">)</span>
 <span class="n">data</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -534,9 +552,7 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Aggregation to daily frequency</span>
-<span class="c1"># ==============================================================================</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="s1">&#39;D&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">({</span><span class="s1">&#39;Demand&#39;</span><span class="p">:</span> <span class="s1">&#39;sum&#39;</span><span class="p">,</span> <span class="s1">&#39;Temperature&#39;</span><span class="p">:</span> <span class="s1">&#39;mean&#39;</span><span class="p">})</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="s1">&#39;D&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">({</span><span class="s1">&#39;Demand&#39;</span><span class="p">:</span> <span class="s1">&#39;sum&#39;</span><span class="p">,</span> <span class="s1">&#39;Temperature&#39;</span><span class="p">:</span> <span class="s1">&#39;mean&#39;</span><span class="p">})</span>
 <span class="n">data</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -591,9 +607,7 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Split train-test</span>
-<span class="c1"># ==============================================================================</span>
-<span class="n">data_train</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[:</span> <span class="s1">&#39;2014-12-21&#39;</span><span class="p">]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_train</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[:</span> <span class="s1">&#39;2014-12-21&#39;</span><span class="p">]</span>
 <span class="n">data_test</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;2014-12-22&#39;</span><span class="p">:]</span>
 </pre></div>
 </div>
@@ -604,9 +618,7 @@ document.write(`
 <h2>Create and train forecaster<a class="headerlink" href="#create-and-train-forecaster" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a recursive multi-step forecaster (ForecasterRecursive)</span>
-<span class="c1"># ==============================================================================</span>
-<span class="n">forecaster</span> <span class="o">=</span> <span class="n">ForecasterRecursive</span><span class="p">(</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">forecaster</span> <span class="o">=</span> <span class="n">ForecasterRecursive</span><span class="p">(</span>
                  <span class="n">regressor</span> <span class="o">=</span> <span class="n">LGBMRegressor</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">123</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=-</span><span class="mi">1</span><span class="p">),</span>
                  <span class="n">lags</span>      <span class="o">=</span> <span class="mi">7</span>
              <span class="p">)</span>
@@ -752,9 +764,7 @@ document.write(`
 <h2>Model-specific feature importances<a class="headerlink" href="#model-specific-feature-importances" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Predictors importances</span>
-<span class="c1"># ==============================================================================</span>
-<span class="n">forecaster</span><span class="o">.</span><span class="n">get_feature_importances</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">forecaster</span><span class="o">.</span><span class="n">get_feature_importances</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -833,9 +843,7 @@ document.write(`
 <h3>Trainig matrices<a class="headerlink" href="#trainig-matrices" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Training matrices used by the forecaster to fit the internal regressor</span>
-<span class="c1"># ==============================================================================</span>
-<span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span> <span class="o">=</span> <span class="n">forecaster</span><span class="o">.</span><span class="n">create_train_X_y</span><span class="p">(</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span> <span class="o">=</span> <span class="n">forecaster</span><span class="o">.</span><span class="n">create_train_X_y</span><span class="p">(</span>
                        <span class="n">y</span>    <span class="o">=</span> <span class="n">data_train</span><span class="p">[</span><span class="s1">&#39;Demand&#39;</span><span class="p">],</span>
                        <span class="n">exog</span> <span class="o">=</span> <span class="n">data_train</span><span class="p">[</span><span class="s1">&#39;Temperature&#39;</span><span class="p">]</span>
                    <span class="p">)</span>
@@ -935,9 +943,7 @@ Freq: D, Name: y, dtype: float64
 <h3>Shap explainer<a class="headerlink" href="#shap-explainer" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create SHAP explainer</span>
-<span class="c1"># ==============================================================================</span>
-<span class="n">shap</span><span class="o">.</span><span class="n">initjs</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">shap</span><span class="o">.</span><span class="n">initjs</span><span class="p">()</span>
 <span class="n">explainer</span> <span class="o">=</span> <span class="n">shap</span><span class="o">.</span><span class="n">TreeExplainer</span><span class="p">(</span><span class="n">forecaster</span><span class="o">.</span><span class="n">regressor</span><span class="p">)</span>
 <span class="n">shap_values</span> <span class="o">=</span> <span class="n">explainer</span><span class="o">.</span><span class="n">shap_values</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
 </pre></div>
@@ -978,9 +984,7 @@ Freq: D, Name: y, dtype: float64
 <h4>Visualize a single prediction<a class="headerlink" href="#visualize-a-single-prediction" title="Link to this heading">#</a></h4>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Force plot for the first observation</span>
-<span class="c1"># ==============================================================================</span>
-<span class="n">shap</span><span class="o">.</span><span class="n">force_plot</span><span class="p">(</span><span class="n">explainer</span><span class="o">.</span><span class="n">expected_value</span><span class="p">,</span> <span class="n">shap_values</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:],</span> <span class="n">X_train</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:])</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">shap</span><span class="o">.</span><span class="n">force_plot</span><span class="p">(</span><span class="n">explainer</span><span class="o">.</span><span class="n">expected_value</span><span class="p">,</span> <span class="n">shap_values</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:],</span> <span class="n">X_train</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:])</span>
 </pre></div>
 </div>
 </div>
@@ -1006,9 +1010,7 @@ Freq: D, Name: y, dtype: float64
 <h4>Visualize many predictions<a class="headerlink" href="#visualize-many-predictions" title="Link to this heading">#</a></h4>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Force plot for the first 200 observations in the training set</span>
-<span class="c1"># ==============================================================================</span>
-<span class="n">shap</span><span class="o">.</span><span class="n">force_plot</span><span class="p">(</span><span class="n">explainer</span><span class="o">.</span><span class="n">expected_value</span><span class="p">,</span> <span class="n">shap_values</span><span class="p">[:</span><span class="mi">200</span><span class="p">,</span> <span class="p">:],</span> <span class="n">X_train</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="mi">200</span><span class="p">,</span> <span class="p">:])</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">shap</span><span class="o">.</span><span class="n">force_plot</span><span class="p">(</span><span class="n">explainer</span><span class="o">.</span><span class="n">expected_value</span><span class="p">,</span> <span class="n">shap_values</span><span class="p">[:</span><span class="mi">200</span><span class="p">,</span> <span class="p">:],</span> <span class="n">X_train</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="mi">200</span><span class="p">,</span> <span class="p">:])</span>
 </pre></div>
 </div>
 </div>
@@ -1035,9 +1037,7 @@ Freq: D, Name: y, dtype: float64
 <h3>SHAP Dependence Plots<a class="headerlink" href="#shap-dependence-plots" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Dependence plot for Temperature</span>
-<span class="c1"># ==============================================================================</span>
-<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
 <span class="n">shap</span><span class="o">.</span><span class="n">dependence_plot</span><span class="p">(</span><span class="s2">&quot;Temperature&quot;</span><span class="p">,</span> <span class="n">shap_values</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -1051,9 +1051,7 @@ Freq: D, Name: y, dtype: float64
 <h3>Explain forecasted values<a class="headerlink" href="#explain-forecasted-values" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Predict</span>
-<span class="c1"># ==============================================================================</span>
-<span class="n">predictions</span> <span class="o">=</span> <span class="n">forecaster</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">exog</span><span class="o">=</span><span class="n">data_test</span><span class="p">[</span><span class="s1">&#39;Temperature&#39;</span><span class="p">])</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">predictions</span> <span class="o">=</span> <span class="n">forecaster</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">exog</span><span class="o">=</span><span class="n">data_test</span><span class="p">[</span><span class="s1">&#39;Temperature&#39;</span><span class="p">])</span>
 <span class="n">predictions</span>
 </pre></div>
 </div>
@@ -1076,9 +1074,7 @@ Freq: D, Name: pred, dtype: float64
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create input matrix for predict method</span>
-<span class="c1"># ==============================================================================</span>
-<span class="n">X_predict</span> <span class="o">=</span> <span class="n">forecaster</span><span class="o">.</span><span class="n">create_predict_X</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">exog</span><span class="o">=</span><span class="n">data_test</span><span class="p">[</span><span class="s1">&#39;Temperature&#39;</span><span class="p">])</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X_predict</span> <span class="o">=</span> <span class="n">forecaster</span><span class="o">.</span><span class="n">create_predict_X</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">exog</span><span class="o">=</span><span class="n">data_test</span><span class="p">[</span><span class="s1">&#39;Temperature&#39;</span><span class="p">])</span>
 <span class="n">X_predict</span>
 </pre></div>
 </div>
@@ -1229,9 +1225,7 @@ Freq: D, Name: pred, dtype: float64
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Force plot for a specific prediction</span>
-<span class="c1"># ==============================================================================</span>
-<span class="n">predicted_date</span> <span class="o">=</span> <span class="s1">&#39;2014-12-22&#39;</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">predicted_date</span> <span class="o">=</span> <span class="s1">&#39;2014-12-22&#39;</span>
 <span class="n">iloc_predicted_date</span> <span class="o">=</span> <span class="n">X_predict</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">get_loc</span><span class="p">(</span><span class="n">predicted_date</span><span class="p">)</span>
 <span class="n">shap_values</span> <span class="o">=</span> <span class="n">explainer</span><span class="o">.</span><span class="n">shap_values</span><span class="p">(</span><span class="n">X_predict</span><span class="p">)</span>
 <span class="n">shap</span><span class="o">.</span><span class="n">force_plot</span><span class="p">(</span>
@@ -1264,15 +1258,11 @@ Freq: D, Name: pred, dtype: float64
 <h3>Permutation feature importance<a class="headerlink" href="#permutation-feature-importance" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Training matrices used by the forecaster to fit the internal regressor</span>
-<span class="c1"># ==============================================================================</span>
-<span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span> <span class="o">=</span> <span class="n">forecaster</span><span class="o">.</span><span class="n">create_train_X_y</span><span class="p">(</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span> <span class="o">=</span> <span class="n">forecaster</span><span class="o">.</span><span class="n">create_train_X_y</span><span class="p">(</span>
                        <span class="n">y</span>    <span class="o">=</span> <span class="n">data_train</span><span class="p">[</span><span class="s1">&#39;Demand&#39;</span><span class="p">],</span>
                        <span class="n">exog</span> <span class="o">=</span> <span class="n">data_train</span><span class="p">[</span><span class="s1">&#39;Temperature&#39;</span><span class="p">]</span>
                    <span class="p">)</span>
 
-<span class="c1"># Permutation importances</span>
-<span class="c1"># ==============================================================================</span>
 <span class="n">r</span> <span class="o">=</span> <span class="n">permutation_importance</span><span class="p">(</span>
         <span class="n">estimator</span>    <span class="o">=</span> <span class="n">forecaster</span><span class="o">.</span><span class="n">regressor</span><span class="p">,</span>
         <span class="n">X</span>            <span class="o">=</span> <span class="n">X_train</span><span class="p">,</span>
@@ -1373,9 +1363,7 @@ Freq: D, Name: pred, dtype: float64
 <h3>Partial dependence plots<a class="headerlink" href="#partial-dependence-plots" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Scikit-learn partial dependence plots</span>
-<span class="c1"># ==============================================================================</span>
-<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Decision Tree&quot;</span><span class="p">)</span>
 <span class="n">pd</span><span class="o">.</span><span class="n">plots</span> <span class="o">=</span> <span class="n">PartialDependenceDisplay</span><span class="o">.</span><span class="n">from_estimator</span><span class="p">(</span>
     <span class="n">estimator</span> <span class="o">=</span> <span class="n">forecaster</span><span class="o">.</span><span class="n">regressor</span><span class="p">,</span>
@@ -1393,6 +1381,154 @@ Freq: D, Name: pred, dtype: float64
 <img alt="_images/db723dca7b0b8d9c1897fd49d0b37d9f42d6f42ddbfcf43301705798cb89c07b.png" src="_images/db723dca7b0b8d9c1897fd49d0b37d9f42d6f42ddbfcf43301705798cb89c07b.png" />
 </div>
 </div>
+</section>
+</section>
+<section id="jawaban-pertanyaan">
+<h2>Jawaban Pertanyaan<a class="headerlink" href="#jawaban-pertanyaan" title="Link to this heading">#</a></h2>
+<section id="analisa-predikisi-tentang-apa">
+<h3>1. Analisa predikisi  tentang apa?<a class="headerlink" href="#analisa-predikisi-tentang-apa" title="Link to this heading">#</a></h3>
+<p>Analisa yang dilakukan merupakan analisis prediksi total permintaan listrik pada waktu berikutnya di Victoria, Australia, menggunakan data historis serta faktor luar yang mempengaruhinya.</p>
+<p>Nama Dataset: vic_electricity</p>
+<p>Diubah menjadi frekuensi harian. Proses agregasi ini dilakukan secara strategis:</p>
+<ul class="simple">
+<li><p>Variabel Demand dihitung menggunakan sum (total), karena penyedia listrik ingin tahu total energi yang dihabiskan dalam satu hari penuh.</p></li>
+<li><p>Variabel Temperature dihitung menggunakan mean (rata-rata), karena suhu rata-rata harian lebih representatif untuk melihat hubungan makro dengan konsumsi listrik harian dibanding total akumulasi suhu.</p></li>
+</ul>
+</section>
+<section id="bagaimana-bentuk-data-trainingnya-apa-saja-inputnya-dan-apa-outputnya">
+<h3>2. Bagaimana bentuk data trainingnya ( apa saja inputnya dan apa outputnya)<a class="headerlink" href="#bagaimana-bentuk-data-trainingnya-apa-saja-inputnya-dan-apa-outputnya" title="Link to this heading">#</a></h3>
+<p>Sebelum dimasukkan ke dalam model, data awal yang berbentuk interval 30 menitan diagregasikan ke dalam bentuk harian (daily frequency). Bentuk data trainingnya adalah sebagai berikut:</p>
+<ul class="simple">
+<li><p>Input :</p>
+<ul>
+<li><p>Lag (lag_1 sampai lag_7): Nilai total permintaan listrik dari 1 hingga 7 hari sebelumnya.</p></li>
+<li><p>Temperature: Rata-rata suhu harian (berperan sebagai variabel eksogen atau exogenous variable).</p></li>
+</ul>
+</li>
+<li><p>Output :</p>
+<ul>
+<li><p>Demand: Total permintaan energi listrik pada hari yang sedang diprediksi.</p></li>
+</ul>
+</li>
+</ul>
+<section id="contoh-data">
+<h4>Contoh Data:<a class="headerlink" href="#contoh-data" title="Link to this heading">#</a></h4>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>lag_1</p></th>
+<th class="head"><p>lag_2</p></th>
+<th class="head"><p>lag_3</p></th>
+<th class="head"><p>Temp</p></th>
+<th class="head"><p>y</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>100</p></td>
+<td><p>90</p></td>
+<td><p>80</p></td>
+<td><p>25°C</p></td>
+<td><p>110</p></td>
+</tr>
+<tr class="row-odd"><td><p>110</p></td>
+<td><p>100</p></td>
+<td><p>90</p></td>
+<td><p>27°C</p></td>
+<td><p>120</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="apa-itu-lag">
+<h3>3. Apa itu lag?<a class="headerlink" href="#apa-itu-lag" title="Link to this heading">#</a></h3>
+<p>Lag merupakan nilai historis dari variabel target yang digeser mundur berdasarkan unit waktu tertentu. Keberadaan lag didasarkan pada asumsi bahwa perilaku masa lalu dari suatu fenomena memiliki korelasi atau pengaruh yang kuat terhadap perilakunya di masa depan.</p>
+<p>Contoh:</p>
+<ul class="simple">
+<li><p>Permintaan listrik Kemaren = Lag_1</p></li>
+<li><p>Permintaan listrik Hari ini = Lag_2</p></li>
+<li><p>Permintaan listrik Besok = Lag_3</p></li>
+<li><p>Permintaan listrik Lusa = Y</p></li>
+</ul>
+<p>Jadi jika Lag_7 merupakan Permintaan 1 minggu sebelumnya</p>
+</section>
+<section id="jelaskan-proses-analisis-yang-dilakukan-dari-kasus-diatas">
+<h3>4. Jelaskan proses analisis yang dilakukan dari kasus diatas<a class="headerlink" href="#jelaskan-proses-analisis-yang-dilakukan-dari-kasus-diatas" title="Link to this heading">#</a></h3>
+<section id="tahap-1-mengambil-data">
+<h4>Tahap 1 Mengambil Data<a class="headerlink" href="#tahap-1-mengambil-data" title="Link to this heading">#</a></h4>
+<p>Untuk mengambil dataset yang akan digunakan dengan cara mengunduh data dari library skforecast, nama dataset yang akan digunakan adalah dataset vic_electricity dengan memiliki 5 kolom dan data sebanyak 52.608.</p>
+<ul class="simple">
+<li><p>Time = tanggal dan waktu pencatatan.</p></li>
+<li><p>Date = tanggal pencatatan.</p></li>
+<li><p>Demand = permintaan listrik (MW).</p></li>
+<li><p>Temperature = suhu di Melbourne, ibu kota Victoria.</p></li>
+<li><p>Holiday = menunjukkan apakah hari tersebut adalah hari libur nasional.</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">fetch_dataset</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;vic_electricity&quot;</span><span class="p">)</span>
+<span class="n">data</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Lalu membagi data menjadi data_train dan data_test</p>
+</section>
+<section id="tahap-2-pembuatan-dan-pelatihan-model">
+<h4>Tahap 2 Pembuatan dan Pelatihan Model<a class="headerlink" href="#tahap-2-pembuatan-dan-pelatihan-model" title="Link to this heading">#</a></h4>
+<section id="pembuatan-matriks-autoregresif">
+<h5>Pembuatan Matriks Autoregresif<a class="headerlink" href="#pembuatan-matriks-autoregresif" title="Link to this heading">#</a></h5>
+<p>Karena data yang digunakan merupakan data time series atau data deret waktu, model tidak dapat langsung memahami urutan waktu tersebut. Oleh karena itu dilakukan proses feature engineering dengan membuat fitur yang disebut lag. Lag adalah nilai dari variabel yang sama pada periode sebelumnya.</p>
+<p>Untuk membuat fitur lag menggunakan <code class="docutils literal notranslate"><span class="pre">ForecasterRecursive</span></code> dengan output demand dan variabel eksogen adalah temperature serta karena data yang akan digunakan untuk prediksi adalah data 7 hari sebelumnya maka lags = 7.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">forecaster</span> <span class="o">=</span> <span class="n">ForecasterRecursive</span><span class="p">(</span>
+                 <span class="n">regressor</span> <span class="o">=</span> <span class="n">LGBMRegressor</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">123</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=-</span><span class="mi">1</span><span class="p">),</span>
+                 <span class="n">lags</span>      <span class="o">=</span> <span class="mi">7</span>
+             <span class="p">)</span>
+
+<span class="n">forecaster</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span>
+    <span class="n">y</span>    <span class="o">=</span> <span class="n">data_train</span><span class="p">[</span><span class="s1">&#39;Demand&#39;</span><span class="p">],</span>
+    <span class="n">exog</span> <span class="o">=</span> <span class="n">data_train</span><span class="p">[</span><span class="s1">&#39;Temperature&#39;</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="n">forecaster</span>
+</pre></div>
+</div>
+</section>
+<section id="pelatihan-model-dengan-algoritma-lightgbm-regressor">
+<h5>Pelatihan Model dengan Algoritma LightGBM Regressor.<a class="headerlink" href="#pelatihan-model-dengan-algoritma-lightgbm-regressor" title="Link to this heading">#</a></h5>
+<p>Algoritma ini dipilih karena mampu menangani data dalam jumlah besar dan dapat menemukan pola yang kompleks dengan cepat. Selama proses training, model akan mempelajari hubungan antara nilai-nilai lag, suhu udara, dan nilai permintaan listrik yang sebenarnya.</p>
+</section>
+</section>
+<section id="tahap-3-model-specific-feature-importance">
+<h4>Tahap 3 Model-Specific Feature Importance<a class="headerlink" href="#tahap-3-model-specific-feature-importance" title="Link to this heading">#</a></h4>
+<p>memanggil forecaster.get_feature_importances(). Ini mengekstrak metrik internal bawaan dari LightGBM berdasarkan seberapa sering suatu fitur digunakan untuk memisahkan data di dalam pohon keputusan.</p>
+<ul class="simple">
+<li><p>Temuan Analisis: Ditemukan bahwa Temperature dan lag_1 memiliki nilai tertinggi.</p></li>
+<li><p>Keterbatasan: Metode ini cepat, tetapi memiliki bias bawaan di mana fitur yang sifatnya kontinu cenderung dinilai lebih penting daripada fitur kategoris atau biner, meskipun aslinya tidak selalu demikian.</p></li>
+</ul>
+</section>
+<section id="tahap-4-analisis-shap">
+<h4>Tahap 4 Analisis SHAP<a class="headerlink" href="#tahap-4-analisis-shap" title="Link to this heading">#</a></h4>
+<p>Untuk mengatasi kelemahan MDI, digunakan pendekatan berbasis Game Theory bernama SHAP. SHAP menghitung kontribusi aditif dari setiap fitur terhadap prediksi akhir dibandingkan dengan nilai rata-rata baseline keseluruhan data.</p>
+<p>Analisis SHAP ini dibagi lagi menjadi tiga:</p>
+<ul class="simple">
+<li><p>SHAP Summary Plot: Grafik ini menunjukkan distribusi seluruh data. Bisa melihat, misalnya, ketika nilai Temperature sangat tinggi, nilai SHAP-nya bergeser ke kanan, yang berarti suhu panas secara konsisten mendorong model untuk menaikkan prediksi permintaan listrik.</p></li>
+<li><p>Explain Individual Observations: Menganalisis satu hari tertentu saja. Kita bisa memeriksa mengapa pada tanggal 5 Januari permintaan listrik sangat melonjak, dan melihat fitur apa saja yang menjadi pemicu utamanya di hari itu.</p></li>
+<li><p>SHAP Dependence Plots: Menampilkan grafik hubungan antara nilai asli sebuah fitur (sumbu X) dengan nilai SHAP (sumbu Y) untuk melihat efek non-linear secara murni.</p></li>
+</ul>
+</section>
+<section id="tahap-5-permutation-feature-importance">
+<h4>Tahap 5 Permutation Feature Importance<a class="headerlink" href="#tahap-5-permutation-feature-importance" title="Link to this heading">#</a></h4>
+<p>Proses analisis dilanjutkan dengan metode independen (tidak bergantung pada LightGBM) bernama permutasi, dengan cara:</p>
+<ul class="simple">
+<li><p>Model sudah selesai dilatih.</p></li>
+<li><p>Salah satu kolom fitur (misalnya lag_1) diacak nilainya secara total untuk merusak hubungan logisnya dengan target, sementara kolom lain dibiarkan normal.</p></li>
+<li><p>Skor performa model dihitung ulang.</p></li>
+</ul>
+<p>Logika Analisis: Jika setelah kolom tersebut diacak performa model langsung anjlok drastis, berarti model sangat bergantung pada fitur tersebut. Di sini terbukti bahwa mengacak lag_1 merusak akurasi model paling parah (0.61), diikuti oleh Temperature (0.41).</p>
+</section>
+<section id="tahap-6-partial-dependence-plots">
+<h4>Tahap 6 Partial Dependence Plots<a class="headerlink" href="#tahap-6-partial-dependence-plots" title="Link to this heading">#</a></h4>
+<p>Melakukan analisis visual menggunakan Partial Dependence Plots untuk melihat dampak marginal dari satu atau dua fitur terhadap prediksi target, dengan mengisolasi atau menetralisasi pengaruh fitur lainnya.</p>
+<ul class="simple">
+<li><p>Temuan Analisis: Grafik PDP untuk Temperature biasanya akan menunjukkan kurva parabola atau non-linear. Kita bisa melihat dengan jelas pada titik suhu berapa (misalnya di atas 25°C) permintaan listrik mulai naik secara eksponensial akibat penggunaan AC.</p></li>
+</ul>
+</section>
 </section>
 </section>
 </section>
@@ -1468,6 +1604,28 @@ Freq: D, Name: pred, dtype: float64
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#explain-forecasted-values">Explain forecasted values</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#permutation-feature-importance">Permutation feature importance</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#partial-dependence-plots">Partial dependence plots</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#jawaban-pertanyaan">Jawaban Pertanyaan</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#analisa-predikisi-tentang-apa">1. Analisa predikisi  tentang apa?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bagaimana-bentuk-data-trainingnya-apa-saja-inputnya-dan-apa-outputnya">2. Bagaimana bentuk data trainingnya ( apa saja inputnya dan apa outputnya)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#contoh-data">Contoh Data:</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#apa-itu-lag">3. Apa itu lag?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#jelaskan-proses-analisis-yang-dilakukan-dari-kasus-diatas">4. Jelaskan proses analisis yang dilakukan dari kasus diatas</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tahap-1-mengambil-data">Tahap 1 Mengambil Data</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tahap-2-pembuatan-dan-pelatihan-model">Tahap 2 Pembuatan dan Pelatihan Model</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#pembuatan-matriks-autoregresif">Pembuatan Matriks Autoregresif</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#pelatihan-model-dengan-algoritma-lightgbm-regressor">Pelatihan Model dengan Algoritma LightGBM Regressor.</a></li>
+</ul>
+</li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tahap-3-model-specific-feature-importance">Tahap 3 Model-Specific Feature Importance</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tahap-4-analisis-shap">Tahap 4 Analisis SHAP</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tahap-5-permutation-feature-importance">Tahap 5 Permutation Feature Importance</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tahap-6-partial-dependence-plots">Tahap 6 Partial Dependence Plots</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
