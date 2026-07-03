@@ -1,0 +1,690 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>UAS &#8212; My sample book</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=174e0f65" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=1ae7504c"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'UAS';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/baru.png" class="logo__image only-light" alt="My sample book - Home"/>
+    <script>document.write(`<img src="_static/baru.png" class="logo__image only-dark" alt="My sample book - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Moh.Rafif Zaki 240411100092
+                </a>
+            </li>
+        </ul>
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Data-Understanding.html">Data Understanding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Missing-Value.html">Missing-Value dan Normalisasi</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Decision-Trees.html">Decision Tree</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Random-Forest.html">Random Forest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="UTS.html">UTS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Linear-Regression.html">Linear-Regression</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Time-Series.html">Time-Series</a></li>
+<li class="toctree-l1"><a class="reference internal" href="forecaster_explainability.html">Analisis Forecaster Explainability</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2FUAS.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/UAS.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>UAS</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analisis-dataset-evaluasi-performa-mahasiswa-pendidikan-tinggi">Analisis Dataset Evaluasi Performa Mahasiswa Pendidikan Tinggi</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dataset">1. DATASET</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#informasi-kolom">1.1 Informasi Kolom</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#knime">Knime</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-preprocessing">Data Preprocessing</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#knn-k-nearest-neighbor">KNN (K Nearest Neighbor)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#hasil-knime">Hasil KNIME</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#random-forest">Random Forest</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Hasil KNIME</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#naive-bayes">Naive Bayes</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Hasil KNIME</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#decision-tree">Decision Tree</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gambar-decision-tree">Gambar Decision Tree</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Hasil KNIME</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#kesimpulan">Kesimpulan</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="uas">
+<h1>UAS<a class="headerlink" href="#uas" title="Link to this heading">#</a></h1>
+<section id="analisis-dataset-evaluasi-performa-mahasiswa-pendidikan-tinggi">
+<h2>Analisis Dataset Evaluasi Performa Mahasiswa Pendidikan Tinggi<a class="headerlink" href="#analisis-dataset-evaluasi-performa-mahasiswa-pendidikan-tinggi" title="Link to this heading">#</a></h2>
+<section id="dataset">
+<h3>1. DATASET<a class="headerlink" href="#dataset" title="Link to this heading">#</a></h3>
+<p>Dataset yang digunakan merupakan dataset Evaluasi Performa Mahasiswa Pendidikan Tinggi. Dataset ini dikumpulkan dari mahasiswa Fakultas Teknik dan Fakultas Ilmu Pendidikan. Tujuannya adalah untuk memprediksi nilai mahasiswa di akhir semester.</p>
+<section id="informasi-kolom">
+<h4>1.1 Informasi Kolom<a class="headerlink" href="#informasi-kolom" title="Link to this heading">#</a></h4>
+<p>Dataset ini terdiri dari 33 kolom, yang terdiri dari 1 kolom kode identitas mahasiswa, 2-11 data adalah pertanyaan pribadi, 12-17. pertanyaan termasuk pertanyaan keluarga, dan pertanyaan yang tersisa termasuk kebiasaan pendidikan.</p>
+<p>Keterangan tiap kolom</p>
+<ul class="simple">
+<li><p>ID Pelajar</p></li>
+</ul>
+<ol class="arabic simple">
+<li><p>Usia Siswa (1: 18-21, 2: 22-25, 3: di atas 26)</p></li>
+<li><p>Jenis kelamin (1: perempuan, 2: laki-laki)</p></li>
+<li><p>Lulus tipe sekolah menengah: (1: swasta, 2: negara bagian, 3: lainnya)</p></li>
+<li><p>Jenis beasiswa: (1: Tidak ada, 2: 25%, 3: 50%, 4: 75%, 5: Penuh)</p></li>
+<li><p>Pekerjaan tambahan: (1: Ya, 2: Tidak)</p></li>
+<li><p>Kegiatan artistik atau olahraga reguler: (1: Ya, 2: Tidak)</p></li>
+<li><p>Apakah Anda memiliki pasangan: (1: Ya, 2: Tidak)</p></li>
+<li><p>Total gaji jika tersedia (1: USD 135-200, 2: USD 201-270, 3: USD 271-340, 4: USD 341-410, 5: di atas 410)</p></li>
+<li><p>Transportasi ke universitas: (1: Bus, 2: Mobil pribadi/taksi, 3: sepeda, 4: Lainnya)</p></li>
+<li><p>Jenis akomodasi di Siprus: (1: sewa, 2: asrama, 3: bersama keluarga, 4: Lainnya)</p></li>
+<li><p>Pendidikan ibu ™: (1: sekolah dasar, 2: sekolah menengah, 3: sekolah menengah, 4: universitas, 5: MSc., 6: Ph.D.)</p></li>
+<li><p>Pendidikan ayah: ™ (1: sekolah dasar, 2: sekolah menengah, 3: sekolah menengah, 4: universitas, 5: MSc., 6: Ph.D.)</p></li>
+<li><p>Jumlah saudara perempuan/saudara laki-laki (jika tersedia): (1: 1, 2:, 2, 3: 3, 4: 4, 5: 5 atau lebih)</p></li>
+<li><p>Status orang tua: (1: menikah, 2: bercerai, 3: meninggal - salah satu dari mereka atau keduanya)</p></li>
+<li><p>Pekerjaan ibu ™: (1: pensiunan, 2: ibu rumah tangga, 3: pejabat pemerintah, 4: karyawan sektor swasta, 5: wiraswasta, 6: lainnya)</p></li>
+<li><p>Pekerjaan ayah: ™ (1: pensiunan, 2: pejabat pemerintah, 3: karyawan sektor swasta, 4: wiraswasta, 5: lainnya)</p></li>
+<li><p>Jam belajar mingguan: (1: Tidak ada, 2: &lt;5 jam, 3: 6-10 jam, 4: 11-20 jam, 5: lebih dari 20 jam)</p></li>
+<li><p>Frekuensi membaca (buku/jurnal non-ilmiah): (1: Tidak ada, 2: Kadang-kadang, 3: Sering)</p></li>
+<li><p>Frekuensi membaca (buku/jurnal ilmiah): (1: Tidak Ada, 2: Kadang-kadang, 3: Sering)</p></li>
+<li><p>Kehadiran seminar/konferensi yang berkaitan dengan departemen: (1: Ya, 2: Tidak)</p></li>
+<li><p>Dampak proyek/aktivitas Anda terhadap kesuksesan Anda: (1: positif, 2: negatif, 3: netral)</p></li>
+<li><p>Kehadiran ke kelas (1: selalu, 2: kadang-kadang, 3: tidak pernah)</p></li>
+<li><p>Persiapan ujian tengah semester 1: (1: sendirian, 2: dengan teman, 3: tidak berlaku)</p></li>
+<li><p>Persiapan ujian tengah semester 2: (1: tanggal terdekat dengan ujian, 2: secara teratur selama semester, 3: tidak pernah)</p></li>
+<li><p>Membuat catatan di kelas: (1: tidak pernah, 2: kadang-kadang, 3: selalu)</p></li>
+<li><p>Mendengarkan di kelas: (1: tidak pernah, 2: terkadang, 3: selalu)</p></li>
+<li><p>Diskusi meningkatkan minat dan kesuksesan saya dalam kursus: (1: tidak pernah, 2: kadang-kadang, 3: selalu)</p></li>
+<li><p>Flip-classroom: (1: tidak berguna, 2: berguna, 3: tidak berlaku)</p></li>
+<li><p>Nilai rata-rata kumulatif pada semester terakhir (/4.00): (1: &lt;2.00, 2: 2.00-2.49, 3: 2.50-2.99, 4: 3.00-3.49, 5: di atas 3.49)</p></li>
+<li><p>Nilai rata-rata kumulatif yang diharapkan dalam kelulusan (/4.00): (1: &lt;2.00, 2: 2.00-2.49, 3: 2.50-2.99, 4: 3.00-3.49, 5: di atas 3.49)</p></li>
+<li><p>ID Kursus</p></li>
+<li><p>Kelas KELUARAN (0: Gagal, 1: DD, 2: DC, 3: CC, 4: CB, 5: BB, 6: BA, 7: AA)</p></li>
+</ol>
+<p><img alt="dataset" src="_images/datacsv.png" /></p>
+</section>
+</section>
+<section id="knime">
+<h3>Knime<a class="headerlink" href="#knime" title="Link to this heading">#</a></h3>
+<p><img alt="Node Knime" src="_images/knm.png" /></p>
+</section>
+<section id="data-preprocessing">
+<h3>Data Preprocessing<a class="headerlink" href="#data-preprocessing" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p>Memfilter kolom yang tidak akan digunakan dalam analisis.</p></li>
+<li><p>Mengubah tipe data grade supaya berubah menjadi string agar dijadikan target.</p></li>
+<li><p>Membagi data menjadi data testing dan data training dengan menggunakan node tabel partisioner.</p></li>
+</ol>
+</section>
+<section id="knn-k-nearest-neighbor">
+<h3>KNN (K Nearest Neighbor)<a class="headerlink" href="#knn-k-nearest-neighbor" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Normalizer &amp; Normalizer (Apply):</strong> Sebelum masuk ke KNN, data training 80% dinormalisasi menggunakan skala <em>Min-Max (0.0 sampai 1.0)</em>. Rumus skala ini kemudian diterapkan pada data testing 20% lewat node <em>Normalizer (Apply)</em>. Normalisasi ini <strong>wajib</strong> karena KNN bekerja berdasarkan perhitungan jarak geometris (<em>Euclidean Distance</em>).</p></li>
+<li><p><strong>K Nearest Neighbor:</strong> Node tunggal yang langsung memperhitungkan kedekatan pola. Berdasarkan konfigurasi, model mengecek sejumlah <span class="math notranslate nohighlight">\(K\)</span> tetangga terdekat (misal <span class="math notranslate nohighlight">\(K=5\)</span> atau angka ganjil lainnya) untuk menentukan prediksi <code class="docutils literal notranslate"><span class="pre">GRADE</span></code> melalui voting mayoritas.</p></li>
+</ul>
+<section id="hasil-knime">
+<h4>Hasil KNIME<a class="headerlink" href="#hasil-knime" title="Link to this heading">#</a></h4>
+<p><img alt="image.png" src="_images/knn.png" /></p>
+<p>Hasil akurasi dari predictor KNN adalah 0.103</p>
+</section>
+</section>
+<section id="random-forest">
+<h3>Random Forest<a class="headerlink" href="#random-forest" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Random Forest Learner:</strong> Menerima data training 80%. Node ini membangun sebuah “hutan” yang berisi ratusan pohon keputusan (<em>Ensemble Learning</em>) secara acak. Atribut <code class="docutils literal notranslate"><span class="pre">STUDENT</span> <span class="pre">ID</span></code> dikeluarkan, dan kolom <code class="docutils literal notranslate"><span class="pre">GRADE</span></code> disetel sebagai <em>Target Column</em>.</p></li>
+<li><p><strong>Random Forest Predictor:</strong> Memanfaatkan kumpulan pohon keputusan yang sudah matang untuk menguji data sisa 20% dan menghasilkan kolom baru bernama <code class="docutils literal notranslate"><span class="pre">Prediction</span> <span class="pre">(GRADE)</span></code> beserta nilai probabilitas keyakinannya.</p></li>
+</ul>
+<section id="id1">
+<h4>Hasil KNIME<a class="headerlink" href="#id1" title="Link to this heading">#</a></h4>
+<p><img alt="image.png" src="_images/random.png" /></p>
+<p>Hasil akurasi dari predictor Random Forest adalah 0.207</p>
+</section>
+</section>
+<section id="naive-bayes">
+<h3>Naive Bayes<a class="headerlink" href="#naive-bayes" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Naive Bayes Learner:</strong> Mempelajari data 80% menggunakan Teorema Probabilitas Bayes. Node ini menghasilkan tabel statistik probabilitas kondisional (<em>Bayes Attribute Statistics</em>), yang mengasumsikan setiap indikator kuesioner berdiri sendiri (independen) dalam memengaruhi peluang kemunculan nilai <code class="docutils literal notranslate"><span class="pre">GRADE</span></code>.</p></li>
+<li><p><strong>Naive Bayes Predictor:</strong> Mencocokkan kombinasi probabilitas kuesioner mahasiswa pada data pengujian untuk menghasilkan tebakan kelompok nilai akhir yang paling berpeluang besar.</p></li>
+</ul>
+<section id="id2">
+<h4>Hasil KNIME<a class="headerlink" href="#id2" title="Link to this heading">#</a></h4>
+<p><img alt="image.png" src="_images/naive.png" /></p>
+<p>Hasil akurasi dari predictor Naive Bayes adalah 0.103</p>
+</section>
+</section>
+<section id="decision-tree">
+<h3>Decision Tree<a class="headerlink" href="#decision-tree" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Decision Tree Learner:</strong> Melatih data latih untuk membentuk satu pohon keputusan terstruktur tunggal berdasarkan perhitungan tingkat keuntungan informasi (<em>Information Gain</em> atau <em>Gini Index</em>) tertinggi dari setiap variabel kuesioner.</p></li>
+<li><p><strong>Decision Tree Predictor:</strong> Menerapkan aturan percabangan aturan (<em>rules</em>) pohon keputusan tersebut untuk menebak target data uji.</p></li>
+</ul>
+<section id="gambar-decision-tree">
+<h4>Gambar Decision Tree<a class="headerlink" href="#gambar-decision-tree" title="Link to this heading">#</a></h4>
+<p><img alt="image.png" src="_images/tree.png" /></p>
+<p>Berdasarkan pengujian menggunakan algoritma Random Forest, performa akademik mahasiswa (GRADE) tidak hanya dipengaruhi oleh faktor internal mahasiswa itu sendiri. Model mendeteksi bahwa karakteristik mata kuliah (COURSE ID) dan rekam jejak akademik sebelumnya (IPK Semester Lalu) adalah dua jangkar utama penentu keberhasilan. Selain itu, faktor eksternal seperti lingkungan keluarga (pendidikan ibu dan jumlah saudara) serta atensi harian di kelas (kebiasaan mendengarkan) turut memegang peranan penting dalam membentuk hasil evaluasi akhir mahasiswa.</p>
+</section>
+<section id="id3">
+<h4>Hasil KNIME<a class="headerlink" href="#id3" title="Link to this heading">#</a></h4>
+<p><img alt="image.png" src="_images/treesc.png" /></p>
+<p>Hasil akurasi dari predictor KNN adalah 0.227</p>
+</section>
+</section>
+<section id="kesimpulan">
+<h3>Kesimpulan<a class="headerlink" href="#kesimpulan" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p>Karakteristik Data dan Kompleksitas Target Kuliah
+Dataset terdiri dari 145 sampel mahasiswa dengan 30 fitur indikator kuesioner. Dalam pemodelan Supervised Learning, penggunaan target GRADE yang memiliki 8 variasi kelas (skala 0 sampai 7) menghadirkan tingkat kompleksitas klasifikasi (multi-class classification) yang sangat tinggi. Hal ini dibuktikan melalui pengujian pada node Scorer, di mana sebaran tebakan model rentan mengalami pergeseran (meleset) ke kelas-kelas tetangganya karena batas pemisah antar-kelas nilai yang sangat rapat.</p></li>
+<li><p>Faktor Penentu Utama Keberhasilan Akademik (Feature Importance)
+Melalui analisis Attribute Importance pada algoritma Random Forest, ditemukan bahwa performa akademik mahasiswa tidak ditentukan oleh satu faktor tunggal, melainkan kombinasi dinamis antara faktor institusional, rekam jejak, dan lingkungan:</p>
+<ul class="simple">
+<li><p>COURSE ID (Mata Kuliah): Menjadi variabel paling dominan (bobot tertinggi ~0.081), membuktikan bahwa tingkat kesulitan atau karakteristik spesifik dari setiap mata kuliah memiliki pengaruh paling besar terhadap perolehan nilai akhir.</p></li>
+<li><p>IPK Semester Lalu (Kolom 29): Menjadi prediktor terkuat kedua (~0.065), menunjukkan adanya konsistensi linear pada performa akademik mahasiswa dari semester sebelumnya.</p></li>
+<li><p>Faktor Keluarga &amp; Atensi Kelas: Latar belakang pendidikan ibu (Kolom 11), jumlah saudara kandung (Kolom 13), serta fokus perilaku mahasiswa dalam mendengarkan penjelasan di dalam kelas (Kolom 26) turut memegang kontribusi krusial dalam membentuk hasil capaian mahasiswa.</p></li>
+</ul>
+</li>
+</ol>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analisis-dataset-evaluasi-performa-mahasiswa-pendidikan-tinggi">Analisis Dataset Evaluasi Performa Mahasiswa Pendidikan Tinggi</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dataset">1. DATASET</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#informasi-kolom">1.1 Informasi Kolom</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#knime">Knime</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-preprocessing">Data Preprocessing</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#knn-k-nearest-neighbor">KNN (K Nearest Neighbor)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#hasil-knime">Hasil KNIME</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#random-forest">Random Forest</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Hasil KNIME</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#naive-bayes">Naive Bayes</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Hasil KNIME</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#decision-tree">Decision Tree</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gambar-decision-tree">Gambar Decision Tree</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Hasil KNIME</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#kesimpulan">Kesimpulan</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By The Jupyter Book Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
